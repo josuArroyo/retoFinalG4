@@ -22,7 +22,9 @@ public class VLogin extends JFrame {
 	private JPanel contentPane;
 	private JTextField textDni;
 	private JPasswordField password;
-
+	private JButton btnLogin;
+	private JButton btnRegis;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -54,16 +56,25 @@ public class VLogin extends JFrame {
 		lblContra.setBounds(24, 112, 150, 40);
 		contentPane.add(lblContra);
 		
-		JButton btnLogin = new JButton("Login");
+		btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnLogin.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
+				 String dni = textDni.getText().toString();
+				 String pass = String.valueOf(password.getPassword());
+				 comprobar(datos,dni,pass);
 			}
 		});
 		btnLogin.setBounds(272, 225, 140, 59);
 		contentPane.add(btnLogin);
 		
-		JButton btnRegis = new JButton("REGISTRARSE");
+		btnRegis = new JButton("REGISTRARSE");
+		btnRegis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VRegistro registro= new VRegistro(true,datos);
+				registro.setVisible(true);
+			}
+		});
 		btnRegis.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnRegis.setBounds(42, 226, 180, 59);
 		contentPane.add(btnRegis);
@@ -71,5 +82,27 @@ public class VLogin extends JFrame {
 		password = new JPasswordField();
 		password.setBounds(24, 163, 364, 31);
 		contentPane.add(password);
+	}
+
+	protected void comprobar(ControladorDatos datos, String dni, String pass) {
+		
+		boolean Registro = false;
+		
+		if(datos.buscarUsuario(dni, pass) != null) {
+			
+			Menu menu = new Menu(true,datos);
+			menu.setVisible(true);
+			textDni.setText("");
+			password.setText("");
+			
+		}else {
+			VErrorLogin ventana =  new VErrorLogin();
+			ventana.setVisible(true);
+			textDni.setText("");
+			password.setText("");
+			
+		}
+		
+		
 	}
 }

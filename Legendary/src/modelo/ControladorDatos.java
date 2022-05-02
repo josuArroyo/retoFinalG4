@@ -12,9 +12,11 @@ public interface ControladorDatos {
 	
 	public void modificarUsuario(Usuario usu);
 	
-	public void eliminarUsuario(Usuario usu);
+	public void eliminarUsuario(String dni,String nombre);
 	
-	public Usuario buscarUsuario(Usuario usu);
+	public Usuario buscarUsuario(String dni, String contrasenia);
+	
+	public boolean buscarUsuarioDni(String dni);
 	
 	public Map<String, Usuario> listarUsuarios();
 	

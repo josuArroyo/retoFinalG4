@@ -8,6 +8,8 @@ public class Usuario {
 	
 	private String dni;
 	private String nombre;
+	private String contrasenia;
+	private String correo;
 	private LocalDate fechaNac;
 	private boolean esAdmin;
 	private int telefono;
@@ -19,10 +21,12 @@ public class Usuario {
 		super();
 	}
 	
-	public Usuario(String dni, String nombre, LocalDate fechaNac, boolean esAdmin, int telefono, String sexo) {
+	public Usuario(String dni, String nombre,String contrasenia,String correo ,LocalDate fechaNac, boolean esAdmin, int telefono, String sexo) {
 		super();
 		this.dni = dni;
 		this.nombre = nombre;
+		this.contrasenia = contrasenia;
+		this.correo = correo;
 		this.fechaNac = fechaNac;
 		this.esAdmin = esAdmin;
 		this.telefono = telefono;
@@ -47,6 +51,22 @@ public class Usuario {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	
+	public String getContrasenia() {
+		return contrasenia;
+	}
+
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
+	}
+	
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 
 	public LocalDate getFechaNac() {
@@ -80,6 +100,8 @@ public class Usuario {
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
+
+	
 	
 	
 	

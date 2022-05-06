@@ -11,8 +11,12 @@ import javax.swing.border.EmptyBorder;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VReserva extends JDialog {
 
@@ -64,14 +68,37 @@ public class VReserva extends JDialog {
 		contentPanel.add(textFFin);
 		
 		JButton btnReservar = new JButton("RESERVAR");
+		btnReservar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Comprobar();
+			}
+		});
 		btnReservar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnReservar.setBounds(263, 277, 209, 49);
 		contentPanel.add(btnReservar);
 		
 		JButton btnVolver = new JButton("Volver");
+		btnVolver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cerrarVentana();
+			}
+		});
 		btnVolver.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnVolver.setBounds(44, 277, 209, 49);
 		contentPanel.add(btnVolver);
+	}
+
+	protected void Comprobar() {
+		if (textFFin.getText().equalsIgnoreCase(textFIni.getText())) {
+			JOptionPane.showMessageDialog(null, "Las fechas son idénticas, introduce unas nuevas");
+			textFFin.setText(null);
+			textFIni.setText(null);
+		}
+		
+	}
+
+	protected void cerrarVentana() {
+		this.dispose();		
 	}
 
 }

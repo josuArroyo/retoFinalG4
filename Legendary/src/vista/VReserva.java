@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ControladorDatos;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -23,8 +26,13 @@ public class VReserva extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param datos 
+	 * @param modal 
+	 * @param ventanaPadre 
 	 */
-	public VReserva() {
+	public VReserva(Menu ventanaPadre, boolean modal, ControladorDatos datos) {
+		super(ventanaPadre);
+		this.setModal(modal);
 		setBounds(100, 100, 534, 376);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

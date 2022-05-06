@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clases.Usuario;
+import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
@@ -35,6 +36,7 @@ public class VRegistro extends JDialog {
 	private JRadioButton rdbtnHombre;
 	private JRadioButton rdbtnOtro;
 	private ButtonGroup grupo1;
+	private ControladorDatos datos = new BDAImplementacion();
 
 	/**
 	 * Launch the application.
@@ -52,10 +54,27 @@ public class VRegistro extends JDialog {
 	/**
 	 * Create the dialog.
 	 * 
+	 * @param ventanaPadre
+	 * 
 	 * @param datos
 	 * @param b
+	 * @wbp.parser.constructor
 	 */
-	public VRegistro(boolean b, ControladorDatos datos) {
+	public VRegistro(VLogin ventanaPadre, boolean modal, ControladorDatos datos) {
+		super(ventanaPadre);
+		this.setModal(modal);
+		cargarVentana(true);
+
+	}
+
+	public VRegistro(VGestionDatos ventanaPadre, boolean modal, ControladorDatos datos2) {
+		super(ventanaPadre);
+		this.setModal(modal);
+		cargarVentana(false);
+	}
+
+	private void cargarVentana(boolean opc) {
+
 		setBounds(100, 100, 636, 636);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -173,6 +192,7 @@ public class VRegistro extends JDialog {
 
 			}
 		});
+
 		btnAlta.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnAlta.setBounds(47, 528, 119, 46);
 		contentPanel.add(btnAlta);
@@ -183,9 +203,24 @@ public class VRegistro extends JDialog {
 		contentPanel.add(btnModificar);
 
 		JButton btnCancelar = new JButton("CANCELAR");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cancelar();
+			}
+		});
 		btnCancelar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnCancelar.setBounds(401, 529, 144, 46);
 		contentPanel.add(btnCancelar);
+
+		if (opc) {
+			btnModificar.setVisible(false);
+		} else if(!opc) {
+			btnAlta.setVisible(false);
+		}
+	}
+
+	protected void cancelar() {
+		this.dispose();
 	}
 
 	protected void alta(ControladorDatos datos) {
@@ -193,33 +228,42 @@ public class VRegistro extends JDialog {
 		Usuario us = new Usuario();
 		LocalDate fecha;
 		boolean found;
+		boolean correcto = false;
 
 		found = datos.buscarUsuarioDni(textDniReg.getText());
 		try {
 
 			if (!found) {
 
-				us.setDni(textDniReg.getText());
-				us.setNombre(textNombreReg.getText());
-				us.setContrasenia(textContraReg.getText());
-				us.setCorreo(textCorreoReg.getText());
+				if (ComprobarDni(textDniReg.getText())) {
 
-				DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
-				us.setFechaNac(fecha);
+					us.setDni(textDniReg.getText());
+					us.setNombre(textNombreReg.getText());
+					us.setContrasenia(textContraReg.getText());
+					us.setCorreo(textCorreoReg.getText());
 
-				comprobarTelefono(textTelReg.getText());
+					DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
+					us.setFechaNac(fecha);
 
-				us.setTelefono(Integer.parseInt(textTelReg.getText()));
-				us.setSexo(grupo1.getSelection().getActionCommand());
+				}
+				if (comprobarTelefono(textTelReg.getText())) {
+					us.setTelefono(Integer.parseInt(textTelReg.getText()));
+					us.setSexo(grupo1.getSelection().getActionCommand());
 
-				datos.altaUsuario(us);
-				textDniReg.setText("");
-				textNombreReg.setText("");
-				textContraReg.setText("");
-				textCorreoReg.setText("");
-				textFechNacReg.setText("");
-				textTelReg.setText("");
+					datos.altaUsuario(us);
+					textDniReg.setText("");
+					textNombreReg.setText("");
+					textContraReg.setText("");
+					textCorreoReg.setText("");
+					textFechNacReg.setText("");
+					textTelReg.setText("");
+
+					correcto = true;
+				} else {
+					VErrorDatosIncorrectos ventana = new VErrorDatosIncorrectos();
+					ventana.setVisible(true);
+				}
 
 			} else {
 				VErrorUsuExist ventana = new VErrorUsuExist();
@@ -232,21 +276,50 @@ public class VRegistro extends JDialog {
 
 	}
 
-	private void comprobarTelefono(String text) {
-
+	private boolean ComprobarDni(String text) {
+		boolean correcto = false;
+		String letras;
 		int numero;
+		char letra[] = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H',
+				'L', 'C', 'K', 'E' };
 
-		if (text.length() < 9) {
-			VErrorDatosIncorrectos ventana = new VErrorDatosIncorrectos();
-			ventana.setVisible(true);
-		} else {
+		if (text.length() == 9) {
+			letras = text.substring(0, 8);
 
-			numero = Integer.parseInt(text);
+			numero = Integer.valueOf(letras) % 23;
 
-			// if() {
-			//
-			// }
+			for (int i = 0; i < text.length(); i++) {
+				if (!Character.isDigit(text.charAt(9))) {
+					if (letra[numero] == text.charAt(9)) {
+						correcto = true;
+					} else {
+						correcto = false;
+					}
+				} else {
+					correcto = false;
+				}
 
+			}
 		}
+		return correcto;
+	}
+
+	private boolean comprobarTelefono(String text) {
+
+		boolean correcto = false;
+
+		if (text.length() == 9) {
+
+			for (int i = 0; i < text.length(); i++) {
+				if (!Character.isDigit(text.charAt(i))) {
+					correcto = false;
+					i = text.length();
+				} else {
+					correcto = true;
+				}
+
+			}
+		}
+		return correcto;
 	}
 }

@@ -8,17 +8,20 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import clases.Hardware;
 import modelo.BDAImplementacion;
+
 import modelo.ControladorDatos;
 
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import java.awt.Font;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 
+
 public class VComprar extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -37,13 +41,16 @@ public class VComprar extends JDialog {
 	private JScrollPane scroll;
 	ArrayList<Hardware> datosHardware;
 	private JTable table;
+
 	private String prueba;
 	ControladorDatos datos = new BDAImplementacion();
 	DefaultTableModel model;
 
+
 	/**
 	 * Launch the application.
 	 */
+
 
 	/**
 	 * Create the dialog.
@@ -56,10 +63,13 @@ public class VComprar extends JDialog {
 		this.setModal(modal);
 
 		setBounds(100, 100, 672, 520);
+
+
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+
 
 		comboBox = new JComboBox();
 
@@ -68,6 +78,7 @@ public class VComprar extends JDialog {
 		comboBox.setBounds(60, 22, 326, 46);
 
 		contentPanel.add(comboBox);
+
 
 		JButton btnNewButton = new JButton("VOLVER");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -78,6 +89,7 @@ public class VComprar extends JDialog {
 		btnNewButton.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnNewButton.setBounds(50, 408, 161, 46);
 		contentPanel.add(btnNewButton);
+
 
 		JButton btnVer = new JButton("Ver");
 		btnVer.addActionListener(new ActionListener() {
@@ -152,5 +164,6 @@ public class VComprar extends JDialog {
 		}
 
 		comboBox.setSelectedIndex(-1);
+
 	}
 }

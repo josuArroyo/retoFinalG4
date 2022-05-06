@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 
 public class VReserva extends JDialog {
@@ -94,7 +95,11 @@ public class VReserva extends JDialog {
 			textFFin.setText(null);
 			textFIni.setText(null);
 		}
-		
+		else if (LocalDate.parse(textFIni.getText()).isBefore( LocalDate.now()) || LocalDate.parse(textFFin.getText()).isBefore( LocalDate.now())) {
+			JOptionPane.showMessageDialog(null, "La fecha de inicio y/o la fecha de fin son anteriores a la fecha actual, introduce unas nuevas ");
+			textFFin.setText(null);
+			textFIni.setText(null);
+		}
 	}
 
 	protected void cerrarVentana() {

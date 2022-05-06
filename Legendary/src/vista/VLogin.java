@@ -28,6 +28,8 @@ public class VLogin extends JFrame {
 	private JPasswordField password;
 	private JButton btnLogin;
 	private JButton btnRegis;
+	private String dni;
+	private String pass;
 
 	private ControladorDatos datos = new BDAImplementacion();
 	
@@ -66,7 +68,9 @@ public class VLogin extends JFrame {
 		btnLogin.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnLogin.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
-				 comprobar(datos);
+				 dni = textDni.getText().toString();
+				 pass = String.valueOf(password.getPassword());
+				 comprobar(datos, dni,pass);
 			}
 		});
 		btnLogin.setBounds(272, 225, 140, 59);
@@ -98,13 +102,13 @@ public class VLogin extends JFrame {
 	protected void comprobar(ControladorDatos datos, String dni, String pass) {
 		
 		boolean Registro = false;
-		String dni = textDni.getText().toString();
-		String pass = String.valueOf(password.getPassword());
+		 dni = textDni.getText().toString();
+		 pass = String.valueOf(password.getPassword());
 		
 		if(datos.buscarUsuario(dni, pass) != null) {
 			
 
-			Menu menu = new Menu(true,datos,dni);
+			Menu menu = new Menu(this, true,datos,dni);
 
 			menu.setVisible(true);
 			textDni.setText("");

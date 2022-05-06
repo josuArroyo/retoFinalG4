@@ -351,34 +351,6 @@ public class BDAImplementacion implements ControladorDatos {
 	@Override
 
 	public ArrayList<Hardware> listarTipoHardware() {
-
-	public ArrayList<Torneo> listarTipoTorneo() {
-		ResultSet rs = null;
-		Torneo tor;
-		Map<String,Torneo> tipoJuego = new TreeMap<>();
-		
-		this.openConnection();
-		
-		try {
-			stmt = con.prepareStatement(ObtenerJuego);
-			
-			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				
-				tor = new Torneo();
-				tor.setJuego(rs.getString(""));
-				
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return null;
-	}
-
 		ResultSet rs = null;
 		Hardware hardw;
 		ArrayList<Hardware> tipohw = new ArrayList<>();
@@ -386,9 +358,7 @@ public class BDAImplementacion implements ControladorDatos {
 		this.openConnection();
 
 		try {
-
 			stmt = con.prepareStatement(OBTENERhardw);
-
 
 			rs = stmt.executeQuery();
 
@@ -424,7 +394,37 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 
 		return tipohw;
-
 	}
+
+	
+
+	public ArrayList<Torneo> listarTipoTorneo() {
+		ResultSet rs = null;
+		Torneo tor;
+		Map<String,Torneo> tipoJuego = new TreeMap<>();
+		
+		this.openConnection();
+		
+		try {
+			stmt = con.prepareStatement(ObtenerJuego);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				tor = new Torneo();
+				tor.setJuego(rs.getString(""));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+	}
+
+	
 
 }

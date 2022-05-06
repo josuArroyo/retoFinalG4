@@ -35,7 +35,7 @@ public class Menu extends JDialog {
 
 
 	private JButton btnComprar;
-	public Menu(JFrame ventanaPadre, boolean modal, ControladorDatos datos) {
+	public Menu(JFrame ventanaPadre, boolean modal, ControladorDatos datos,String dni) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		

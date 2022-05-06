@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -25,24 +26,31 @@ public class Menu extends JDialog {
 	 */
 	/**
 	 * Create the dialog.
+
+
 	 * @param modal 
 	 * @param datos 
 	 * @param dni 
 	 */
-	public Menu(boolean modal, ControladorDatos datos, String dni) {
-		super();
+
+
+	private JButton btnComprar;
+	public Menu(JFrame ventanaPadre, boolean modal, ControladorDatos datos) {
+		super(ventanaPadre);
 		this.setModal(modal);
+		
 		setBounds(100, 100, 768, 538);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			JButton btnComprar = new JButton("Comprar");
+
+			btnComprar = new JButton("Comprar");
 			btnComprar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					VComprar ventana = new VComprar(datos);
-					ventana.setVisible(true);
+					comprar(datos);
+
 				}
 			});
 			btnComprar.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -53,7 +61,10 @@ public class Menu extends JDialog {
 			JButton btnTorneo = new JButton("Torneo");
 			btnTorneo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+
+
 					cargarTorneo(dni);
+          
 				}
 			});
 			btnTorneo.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -82,6 +93,11 @@ public class Menu extends JDialog {
 			btnReservar.setBounds(415, 283, 258, 142);
 			contentPanel.add(btnReservar);
 		}
+	}
+	protected void comprar(ControladorDatos datos) {
+		VComprar comprar = new VComprar(this, true, datos);
+		comprar.setVisible(true);
+		
 	}
 
 	protected void cargarDatos() {

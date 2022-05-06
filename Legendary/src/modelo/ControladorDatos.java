@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import clases.*;
@@ -18,7 +19,7 @@ public interface ControladorDatos {
 	
 	public boolean buscarUsuarioDni(String dni);
 	
-	public Map<String, Usuario> listarUsuarios();
+	public  ArrayList<Usuario> listarUsuarios();
 	
 	//Todo de Hardware
 	
@@ -30,9 +31,11 @@ public interface ControladorDatos {
 	
 	public void comprarHardware(Hardware har);
 	
-	public Map<String, Hardware> listarHardware();
+	public  ArrayList<Hardware> listarHardware();
 	
-	public Map<String, Hardware> listarDatosHardware();
+	public  ArrayList<Hardware>  listarDatosHardware(String  tipo);
+	
+	public ArrayList<Hardware> listarTipoHardware();
 	
 	// Todo Torneo 
 	
@@ -40,9 +43,9 @@ public interface ControladorDatos {
 	
 	public void buscarTorneo(Torneo tor);
 	
-	public Map<String, Torneo> listarTorneos();
+	public  ArrayList<Torneo> listarTorneos();
 	
-	public Map<String, Torneo> listarDatosTorneos();
+	public  ArrayList<Torneo> listarDatosTorneos();
 	
 	//Todo Plazas 
 	

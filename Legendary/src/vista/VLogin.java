@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Usuario;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
@@ -24,7 +25,7 @@ public class VLogin extends JFrame {
 	private JPasswordField password;
 	private JButton btnLogin;
 	private JButton btnRegis;
-	
+	private Usuario usu = new Usuario();
 	/**
 	 * Launch the application.
 	 */
@@ -60,9 +61,7 @@ public class VLogin extends JFrame {
 		btnLogin.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnLogin.addActionListener(new ActionListener() {
 			 public void actionPerformed(ActionEvent e) {
-				 String dni = textDni.getText().toString();
-				 String pass = String.valueOf(password.getPassword());
-				 comprobar(datos,dni,pass);
+				 comprobar(datos);
 			}
 		});
 		btnLogin.setBounds(272, 225, 140, 59);
@@ -84,13 +83,15 @@ public class VLogin extends JFrame {
 		contentPane.add(password);
 	}
 
-	protected void comprobar(ControladorDatos datos, String dni, String pass) {
+	protected void comprobar(ControladorDatos datos) {
 		
 		boolean Registro = false;
+		String dni = textDni.getText().toString();
+		String pass = String.valueOf(password.getPassword());
 		
 		if(datos.buscarUsuario(dni, pass) != null) {
 			
-			Menu menu = new Menu(true,datos);
+			Menu menu = new Menu(this, true, datos);
 			menu.setVisible(true);
 			textDni.setText("");
 			password.setText("");

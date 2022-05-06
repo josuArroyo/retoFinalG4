@@ -6,7 +6,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 
 import clases.*;
 
@@ -20,10 +22,14 @@ public class BDAImplementacion implements ControladorDatos {
 
 	final String ObtenerUsu = "select * from usuario where dni=? and contrasenia=?";
 	final String ObtenerDniUsu = "select * from usuario";
-
+	final String ObtenerJuego = "Select * from torneo";
+	final String ObtenerDatosHW = "Select * from hardware where tipo = ?";
+	final String ObtenerHW = "Select distinct * from hardware group by tipo";
+	
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para añiadir un usuario.
 	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
+	
 
 	// Metodo para conectarse a la base de datos.
 	public void openConnection() {
@@ -220,7 +226,7 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public Map<String, Usuario> listarUsuarios() {
+	public ArrayList<Usuario> listarUsuarios() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -250,15 +256,67 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public Map<String, Hardware> listarHardware() {
+	public ArrayList<Hardware> listarHardware() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Hardware> listarDatosHardware() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Hardware> listarDatosHardware(String tipo) {
+		
+		ArrayList <Hardware> listaHardware = new ArrayList<>();
+		ResultSet rs = null;
+		Hardware har;
+		
+		// Abrimos la conexion con la BD.
+				this.openConnection();
+
+				try {
+					// Usamos la variable de conexion para usar la variable de ejecucion de
+					// sentencias.
+					stmt = con.prepareStatement(ObtenerDatosHW);
+
+					
+					stmt.setString(1, tipo);
+
+					// Guardamos el resultado devuelto por la sentencia SQL en una variable
+					rs = stmt.executeQuery();
+
+					while (rs.next()) {
+						har = new Hardware();
+						
+						har.setIdHW(rs.getInt("id_Hardware"));
+						har.setNombreHW(rs.getString("nombre"));
+						har.setPrecioHW(rs.getFloat("precio"));
+						har.setMarcaHW(rs.getString("marca"));
+						har.setTipoHW(rs.getString("tipo"));
+						har.setStockHW(rs.getInt("stock"));
+						har.setPrecioCosteHW(rs.getFloat("precio_coste"));
+						listaHardware.add(har);
+					}
+				}catch (SQLException e) {
+					// TODO Auto-generated catch block
+					
+				} finally {
+					if (rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					try {
+						this.closeConnection();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+		
+		
+		
+		return listaHardware;
 	}
 
 	@Override
@@ -274,13 +332,13 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public Map<String, Torneo> listarTorneos() {
+	public ArrayList<Torneo> listarTorneos() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Torneo> listarDatosTorneos() {
+	public ArrayList<Torneo> listarDatosTorneos() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -289,6 +347,82 @@ public class BDAImplementacion implements ControladorDatos {
 	public void reservarPlaza(Plaza plaz) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public ArrayList<Torneo> listarTipoTorneo() {
+		ResultSet rs = null;
+		Torneo tor;
+		Map<String,Torneo> tipoJuego = new TreeMap<>();
+		
+		this.openConnection();
+		
+		try {
+			stmt = con.prepareStatement(ObtenerJuego);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				tor = new Torneo();
+				tor.setJuego(rs.getString(""));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+	}
+
+	@Override
+	public ArrayList<Hardware> listarTipoHardWare() {
+		ResultSet rs = null;
+		Hardware hardw;
+		ArrayList<Hardware> tipohw = new ArrayList<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerHW);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				hardw = new Hardware();
+				hardw.setTipoHW(rs.getString("Tipo").toString());
+				tipohw.add(hardw);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en el cierre del ResultSet");
+				} catch (Exception ex) {
+					System.out.println("Error consulta props");
+				}
+			}
+
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return tipohw;
+		
 	}
 
 }

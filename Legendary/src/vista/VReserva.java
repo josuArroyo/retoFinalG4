@@ -100,6 +100,11 @@ public class VReserva extends JDialog {
 			textFFin.setText(null);
 			textFIni.setText(null);
 		}
+		else if (LocalDate.parse(textFFin.getText()).isBefore(LocalDate.parse(textFIni.getText()))) {
+			JOptionPane.showMessageDialog(null, "La fecha de fin de reserva es anterior a la de inicio, vuelva a introducirlas");
+			textFFin.setText(null);
+			textFIni.setText(null);
+		}
 	}
 
 	protected void cerrarVentana() {

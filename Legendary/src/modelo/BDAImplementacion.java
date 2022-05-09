@@ -30,7 +30,7 @@ public class BDAImplementacion implements ControladorDatos {
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para añiadir un usuario.
 	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
-	
+	final String ReservarPlaza = "CALL `ReservaPlaza`(?, ?, ?, ?)";
 
 	// Metodo para conectarse a la base de datos.
 	public void openConnection() {
@@ -58,7 +58,7 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 	}
 
-	// Metodo para añadir Usuarios.
+	// Metodo para aniadir Usuarios.
 	@Override
 	public void altaUsuario(Usuario usu) {
 		// TODO Auto-generated method stub
@@ -71,7 +71,7 @@ public class BDAImplementacion implements ControladorDatos {
 			// sentencias.
 			stmt = con.prepareStatement(AltaUsuario);
 
-			// recogemos los valores por pantalle para enviarlos a la BD.
+			// recogemos los valores por pantalla para enviarlos a la BD.
 			stmt.setString(1, usu.getDni());
 			stmt.setString(2, usu.getNombre());
 			stmt.setString(3, usu.getContrasenia());
@@ -225,7 +225,8 @@ public class BDAImplementacion implements ControladorDatos {
 
 		return found;
 	}
-
+	
+	
 	@Override
 	public ArrayList<Usuario> listarUsuarios() {
 		// TODO Auto-generated method stub
@@ -343,9 +344,28 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void reservarPlaza(Plaza plaz) {
-		// TODO Auto-generated method stub
+	public void reservarPlaza(Plaza plaz) {		
+		this.openConnection();
+		
+		try {
+			// Usamos la variable de conexion para usar la variable de ejecucion de
+			// sentencias.
+			stmt = con.prepareStatement(ReservaPlaza);
 
+						// recogemos los valores por pantalla para enviarlos a la BD.
+			stmt.setString(1, usu.getDni());
+			stmt.setString(2, usu.getNombre());
+			stmt.setString(3, usu.getContrasenia());
+			stmt.setString(4, usu.getCorreo());
+			stmt.setDate(5, Date.valueOf(usu.getFechaNac()));
+			stmt.setInt(6, usu.getTelefono());
+			stmt.setString(7, usu.getSexo());
+			stmt.setBoolean(8, false);
+
+			// Ejecutamos la sentecia de actualizacion.
+			stmt.executeUpdate();
+
+		}
 	}
 
 	@Override

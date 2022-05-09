@@ -12,6 +12,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VAniadirTorneo extends JDialog {
 
@@ -26,15 +28,6 @@ public class VAniadirTorneo extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			VAniadirTorneo dialog = new VAniadirTorneo();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
@@ -119,6 +112,11 @@ public class VAniadirTorneo extends JDialog {
 		contentPanel.add(comboReglas);
 		
 		JButton btnCrearTor = new JButton("Crear");
+		btnCrearTor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnCrearTor.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnCrearTor.setBounds(383, 478, 192, 38);
 		contentPanel.add(btnCrearTor);

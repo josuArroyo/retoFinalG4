@@ -51,9 +51,9 @@ public interface ControladorDatos {
 
 	public ArrayList<Torneo> listarTorneos();
 	
-	public ArrayList<Torneo> listarDatosTorneos();
+	public ArrayList<Torneo> listarDatosTorneos(String juego);
 	
-	public ArrayList<Torneo> listarTipoTorneo();
+	public ArrayList<Torneo> listarJuegoTorneo();
 
 	
 	//Todo Plazas 

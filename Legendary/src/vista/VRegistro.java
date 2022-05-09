@@ -235,7 +235,7 @@ public class VRegistro extends JDialog {
 
 			if (!found) {
 
-				if (ComprobarDni(textDniReg.getText())) {
+				
 
 					us.setDni(textDniReg.getText());
 					us.setNombre(textNombreReg.getText());
@@ -246,7 +246,6 @@ public class VRegistro extends JDialog {
 					fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
 					us.setFechaNac(fecha);
 
-				}
 				if (comprobarTelefono(textTelReg.getText())) {
 					us.setTelefono(Integer.parseInt(textTelReg.getText()));
 					us.setSexo(grupo1.getSelection().getActionCommand());

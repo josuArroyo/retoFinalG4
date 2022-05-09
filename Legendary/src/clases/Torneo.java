@@ -12,6 +12,7 @@ public class Torneo {
 	private String juego;
 	private LocalDate fecha;
 	private String dir;
+	private String tipo;
 	
 	
 	
@@ -21,7 +22,7 @@ public class Torneo {
 		super();
 	}
 	
-	public Torneo(int idTorneo, String nombre, int aforo, String juego, LocalDate fecha, String dir) {
+	public Torneo(int idTorneo, String nombre, int aforo, String juego, LocalDate fecha, String dir,String tipo) {
 		super();
 		this.idTorneo = idTorneo;
 		this.nombre = nombre;
@@ -29,6 +30,7 @@ public class Torneo {
 		this.juego = juego;
 		this.fecha = fecha;
 		this.dir = dir;
+		this.tipo = tipo;
 	}
 
 	
@@ -81,6 +83,14 @@ public class Torneo {
 
 	public void setDir(String dir) {
 		this.dir = dir;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 	

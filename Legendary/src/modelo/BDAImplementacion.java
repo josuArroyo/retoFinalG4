@@ -7,8 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
 
 import clases.*;
 
@@ -20,12 +19,17 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// Sentencias SQL
 
+	//Usuarios
 	final String ObtenerUsu = "select * from usuario where dni=? and contrasenia=?";
 	final String ObtenerDniUsu = "select * from usuario";
-
+	
+	//Hardware
 	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
 	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
-	final String ObtenerJuego = "Select * from torneo";
+	
+	//Torneos
+	final String ObtenerJuego = "Select distinct * from torneo group by juego";
+	final String ObtenerDatosTorneos= "select * from torneo where juego = ?";
   
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para añiadir un usuario.
@@ -337,9 +341,56 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public ArrayList<Torneo> listarDatosTorneos() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Torneo> listarDatosTorneos(String juego) {
+		ArrayList<Torneo> listaTorneos = new ArrayList<>();
+		ResultSet rs = null;
+		
+		
+		this.openConnection();
+		
+		try {
+			stmt = con.prepareStatement(ObtenerDatosTorneos);
+			
+			stmt.setString(1, juego);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Torneo tor = new Torneo();
+				tor.setIdTorneo(rs.getInt("id_torneo"));
+				tor.setNombre(rs.getString("nombre"));
+				tor.setAforo(rs.getInt("aforo"));
+				tor.setJuego(rs.getString("juego"));
+				tor.setDir(rs.getString("direccion"));
+				tor.setFecha(rs.getDate("fecha").toLocalDate());
+				tor.setTipo(rs.getString("tipo"));
+				listaTorneos.add(tor);
+				
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		
+		
+		return listaTorneos;
 	}
 
 	@Override
@@ -398,10 +449,10 @@ public class BDAImplementacion implements ControladorDatos {
 
 	
 
-	public ArrayList<Torneo> listarTipoTorneo() {
+	public ArrayList<Torneo> listarJuegoTorneo() {
 		ResultSet rs = null;
 		Torneo tor;
-		Map<String,Torneo> tipoJuego = new TreeMap<>();
+		ArrayList<Torneo> tipoJuego = new ArrayList<>();
 		
 		this.openConnection();
 		
@@ -413,16 +464,36 @@ public class BDAImplementacion implements ControladorDatos {
 			while(rs.next()) {
 				
 				tor = new Torneo();
-				tor.setJuego(rs.getString(""));
+				tor.setJuego(rs.getString("juego").toString());
+				tipoJuego.add(tor);
 				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			// cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en el cierre del ResultSet");
+				} catch (Exception ex) {
+					System.out.println("Error consulta props");
+				}
+			}
+
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		
 		
-		return null;
+		return tipoJuego;
 	}
 
 	

@@ -11,8 +11,13 @@ import javax.swing.border.EmptyBorder;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.awt.event.ActionEvent;
 
 public class VReserva extends JDialog {
 
@@ -64,14 +69,46 @@ public class VReserva extends JDialog {
 		contentPanel.add(textFFin);
 		
 		JButton btnReservar = new JButton("RESERVAR");
+		btnReservar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Comprobar();
+			}
+		});
 		btnReservar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnReservar.setBounds(263, 277, 209, 49);
 		contentPanel.add(btnReservar);
 		
 		JButton btnVolver = new JButton("Volver");
+		btnVolver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cerrarVentana();
+			}
+		});
 		btnVolver.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnVolver.setBounds(44, 277, 209, 49);
 		contentPanel.add(btnVolver);
+	}
+
+	protected void Comprobar() {
+		if (textFFin.getText().equalsIgnoreCase(textFIni.getText())) {
+			JOptionPane.showMessageDialog(null, "Las fechas son idénticas, introduce unas nuevas");
+			textFFin.setText(null);
+			textFIni.setText(null);
+		}
+		else if (LocalDate.parse(textFIni.getText()).isBefore( LocalDate.now()) || LocalDate.parse(textFFin.getText()).isBefore( LocalDate.now())) {
+			JOptionPane.showMessageDialog(null, "La fecha de inicio y/o la fecha de fin son anteriores a la fecha actual, introduce unas nuevas ");
+			textFFin.setText(null);
+			textFIni.setText(null);
+		}
+		else if (LocalDate.parse(textFFin.getText()).isBefore(LocalDate.parse(textFIni.getText()))) {
+			JOptionPane.showMessageDialog(null, "La fecha de fin de reserva es anterior a la de inicio, vuelva a introducirlas");
+			textFFin.setText(null);
+			textFIni.setText(null);
+		}
+	}
+
+	protected void cerrarVentana() {
+		this.dispose();		
 	}
 
 }

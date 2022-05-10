@@ -50,7 +50,7 @@ public class VComprar extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-//miau
+
 
 	/**
 	 * Create the dialog.

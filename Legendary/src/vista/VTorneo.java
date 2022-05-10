@@ -150,7 +150,7 @@ public class VTorneo extends JDialog {
 
 	protected void cargarAniadirTorneo() {
 		
-		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo();
+		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo(this,true,datos);
 		ventanaAniadirTor.setVisible(true);
 		
 	}

@@ -107,7 +107,6 @@ public class VLogin extends JFrame {
 		
 		if(datos.buscarUsuario(dni, pass) != null) {
 			
-
 			Menu menu = new Menu(this, true,datos,dni);
 
 			menu.setVisible(true);

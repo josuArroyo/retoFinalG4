@@ -49,7 +49,7 @@ public class Menu extends JDialog {
 			btnComprar = new JButton("Comprar");
 			btnComprar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					comprar(datos);
+					comprar(datos,dni);
 
 				}
 			});
@@ -94,8 +94,8 @@ public class Menu extends JDialog {
 			contentPanel.add(btnReservar);
 		}
 	}
-	protected void comprar(ControladorDatos datos) {
-		VComprar comprar = new VComprar(this, true, datos);
+	protected void comprar(ControladorDatos datos, String dni) {
+		VComprar comprar = new VComprar(this, true,dni ,datos);
 		comprar.setVisible(true);
 		
 	}

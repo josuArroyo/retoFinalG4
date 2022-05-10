@@ -1,5 +1,6 @@
 package modelo;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import Excepciones.ExceptionManager;
 import clases.*;
 
 public class BDAImplementacion implements ControladorDatos {
@@ -26,11 +28,11 @@ public class BDAImplementacion implements ControladorDatos {
 	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
 	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
 	final String ObtenerJuego = "Select * from torneo";
-  
+
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para añiadir un usuario.
 	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
-	
+	final String ComprarProducto = "{CALL `ComprarProducto`(?,?,?,?)}";
 
 	// Metodo para conectarse a la base de datos.
 	public void openConnection() {
@@ -85,8 +87,7 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+
 		} finally {
 			try {
 				this.closeConnection();
@@ -251,8 +252,36 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void comprarHardware(Hardware har) {
-		// TODO Auto-generated method stub
+	public void comprarHardware(Factura fac, String Dni) {
+
+		this.openConnection();
+
+		try {
+			
+
+			stmt  = con.prepareCall(ComprarProducto);
+
+			stmt.setString(1, fac.getNombre());
+			stmt.setInt(2, fac.getCantidad());
+			stmt.setString(3, fac.getDni());
+			stmt.setDate(4, Date.valueOf(fac.getFechaFactura()));
+
+			
+			
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -265,13 +294,11 @@ public class BDAImplementacion implements ControladorDatos {
 	@Override
 	public ArrayList<Hardware> listarDatosHardware(String tipo) {
 
-
 		// Variables
 		ArrayList<Hardware> datosHardware = new ArrayList<>();
 		ResultSet rs = null;
 		Hardware hardw = null;
-		//boolean found = false;
-	
+		// boolean found = false;
 
 		// Abrimos la conexion con la BD.
 		this.openConnection();
@@ -311,8 +338,6 @@ public class BDAImplementacion implements ControladorDatos {
 				e.printStackTrace();
 			}
 		}
-		
-		
 
 		return datosHardware;
 
@@ -396,35 +421,30 @@ public class BDAImplementacion implements ControladorDatos {
 		return tipohw;
 	}
 
-	
-
 	public ArrayList<Torneo> listarTipoTorneo() {
 		ResultSet rs = null;
 		Torneo tor;
-		Map<String,Torneo> tipoJuego = new TreeMap<>();
-		
+		Map<String, Torneo> tipoJuego = new TreeMap<>();
+
 		this.openConnection();
-		
+
 		try {
 			stmt = con.prepareStatement(ObtenerJuego);
-			
+
 			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				
+
+			while (rs.next()) {
+
 				tor = new Torneo();
 				tor.setJuego(rs.getString(""));
-				
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		return null;
 	}
-
-	
 
 }

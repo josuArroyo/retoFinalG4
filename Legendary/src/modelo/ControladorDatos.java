@@ -3,13 +3,14 @@ package modelo;
 import java.util.ArrayList;
 import java.util.Map;
 
+import Excepciones.ExceptionManager;
 import clases.*;
 
 public interface ControladorDatos {
 
 	//Todo de Usuarios
 	
-	public void altaUsuario(Usuario usu);
+	public void altaUsuario(Usuario usu) ;
 	
 	public void modificarUsuario(Usuario usu);
 	
@@ -31,7 +32,7 @@ public interface ControladorDatos {
 	
 	public void modificarHardware(Hardware har);
 	
-	public void comprarHardware(Hardware har);
+	public void comprarHardware(Factura fac, String Dni);
 	
 
 	public  ArrayList<Hardware> listarHardware();

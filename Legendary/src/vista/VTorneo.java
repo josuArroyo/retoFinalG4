@@ -64,17 +64,21 @@ public class VTorneo extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
+
 			
+
 			JLabel lblNewLabel = new JLabel("Haz doble click sobre un torneo para ver mas inforamacion e inscribirte al mismo");
 			lblNewLabel.setFont(new Font("Algerian", Font.PLAIN, 11));
 			lblNewLabel.setBounds(50, 51, 567, 38);
 			contentPanel.add(lblNewLabel);
 		
 		
+
 			comboBox = new JComboBox();
 			comboBox.setBounds(60, 106, 333, 38);
 			contentPanel.add(comboBox);
 			cargarCombo(datos);
+
 		
 		//Variable para compobar si es admin o no para deshabilitar o habilitar el boton de crear
 		boolean found;

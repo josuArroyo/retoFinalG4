@@ -32,7 +32,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 
-
 public class VComprar extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -41,44 +40,40 @@ public class VComprar extends JDialog {
 	private JScrollPane scroll;
 	ArrayList<Hardware> datosHardware;
 	private JTable table;
-
+	private String dni;
 	private String prueba;
 	ControladorDatos datos = new BDAImplementacion();
 	DefaultTableModel model;
-
+	
 
 	/**
 	 * Launch the application.
 	 */
-
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param modal
 	 * @param ventanaPadre
+	 * @param datos2 
+	 * @param dni 
 	 */
-	public VComprar(JDialog ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VComprar(JDialog ventanaPadre, boolean modal, String dni, ControladorDatos datos2) {
 		super(ventanaPadre);
 		this.setModal(modal);
+		this.dni=dni;
 
 		setBounds(100, 100, 672, 520);
-
 
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-
 		comboBox = new JComboBox();
-
 		cargarTipoHardware(datos);
-
 		comboBox.setBounds(60, 22, 326, 46);
-
 		contentPanel.add(comboBox);
-
 
 		JButton btnNewButton = new JButton("VOLVER");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -89,7 +84,6 @@ public class VComprar extends JDialog {
 		btnNewButton.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnNewButton.setBounds(50, 408, 161, 46);
 		contentPanel.add(btnNewButton);
-
 
 		JButton btnVer = new JButton("Ver");
 		btnVer.addActionListener(new ActionListener() {
@@ -103,9 +97,9 @@ public class VComprar extends JDialog {
 	}
 
 	protected void volver() {
-		
+
 		this.dispose();
-		
+
 	}
 
 	protected void presentarTabla() {
@@ -117,7 +111,31 @@ public class VComprar extends JDialog {
 		scroll.setViewportView(table);
 
 		contentPanel.add(scroll);
-		scroll.setBounds(24, 191, 412, 70);
+		scroll.setBounds(50, 171, 544, 186);
+
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				seleccionHardware(dni);
+			}
+		});
+
+	}
+
+	protected void seleccionHardware(String dni2) {
+		int row = table.getSelectedRow();
+		String texto = (String) table.getValueAt(row, 0);
+		int idHw = Integer.parseInt(texto);
+
+		Hardware hardw = new Hardware();
+		for (Hardware hardware : datosHardware) {
+			if (hardware.getIdHW() == idHw) {
+				hardw = hardware;
+			}
+		}
+		VCRUDHardware crudhard = new VCRUDHardware(this, true, datos, hardw, dni2);
+		crudhard.setVisible(true);
+
 	}
 
 	private JTable cargarTabla() {
@@ -143,11 +161,6 @@ public class VComprar extends JDialog {
 
 			model.addRow(columna);
 		}
-
-//		for (int i = 0; i < columna.length; i++) {
-//			String string = columna[i];
-//			System.out.println(string);
-//		}
 
 		return new JTable(model);
 

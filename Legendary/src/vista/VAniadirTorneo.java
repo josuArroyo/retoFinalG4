@@ -7,40 +7,43 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.ControladorDatos;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VAniadirTorneo extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textId;
 	private JTextField textNombre;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-
+	private JTextField textAforo;
+	private JTextField textJuego;
+	private JTextField textFecha;
+	private JTextField textDir;
+	private JTextField textOpc;
+	
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			VAniadirTorneo dialog = new VAniadirTorneo();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
+	 * @param datos 
+	 * @param modal 
+	 * @param ventanaPadre 
 	 */
-	public VAniadirTorneo() {
-		setBounds(100, 100, 679, 573);
+	public VAniadirTorneo(VTorneo ventanaPadre, boolean modal, ControladorDatos datos) {
+		super(ventanaPadre);
+		this.setModal(modal);
+		setBounds(100, 100, 699, 589);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -61,7 +64,7 @@ public class VAniadirTorneo extends JDialog {
 		lblAforo.setBounds(57, 177, 94, 26);
 		contentPanel.add(lblAforo);
 		
-		JLabel lblPremio = new JLabel("PREMIO");
+		JLabel lblPremio = new JLabel("Juego");
 		lblPremio.setFont(new Font("Algerian", Font.PLAIN, 20));
 		lblPremio.setBounds(378, 177, 94, 26);
 		contentPanel.add(lblPremio);
@@ -86,41 +89,52 @@ public class VAniadirTorneo extends JDialog {
 		textNombre.setBounds(378, 109, 197, 38);
 		contentPanel.add(textNombre);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(57, 214, 197, 38);
-		contentPanel.add(textField);
+		textAforo = new JTextField();
+		textAforo.setColumns(10);
+		textAforo.setBounds(57, 214, 197, 38);
+		contentPanel.add(textAforo);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(378, 214, 197, 38);
-		contentPanel.add(textField_1);
+		textJuego = new JTextField();
+		textJuego.setColumns(10);
+		textJuego.setBounds(378, 214, 197, 38);
+		contentPanel.add(textJuego);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(57, 324, 197, 38);
-		contentPanel.add(textField_2);
+		textFecha = new JTextField();
+		textFecha.setColumns(10);
+		textFecha.setBounds(57, 324, 197, 38);
+		contentPanel.add(textFecha);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(378, 331, 197, 38);
-		contentPanel.add(textField_3);
+		textDir = new JTextField();
+		textDir.setColumns(10);
+		textDir.setBounds(378, 331, 197, 38);
+		contentPanel.add(textDir);
 		
 		JRadioButton rdbtnOficial = new JRadioButton("OFICIAL");
-		rdbtnOficial.setBounds(42, 430, 77, 23);
+		rdbtnOficial.setBounds(378, 405, 77, 23);
 		contentPanel.add(rdbtnOficial);
 		
 		JRadioButton rdbtnNoOficial = new JRadioButton("NO-OFICIAL");
-		rdbtnNoOficial.setBounds(127, 430, 99, 23);
+		rdbtnNoOficial.setBounds(490, 405, 99, 23);
 		contentPanel.add(rdbtnNoOficial);
 		
-		JComboBox comboReglas = new JComboBox();
-		comboReglas.setBounds(278, 430, 351, 23);
-		contentPanel.add(comboReglas);
-		
 		JButton btnCrearTor = new JButton("Crear");
+		btnCrearTor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnCrearTor.setFont(new Font("Algerian", Font.PLAIN, 20));
-		btnCrearTor.setBounds(383, 478, 192, 38);
+		btnCrearTor.setBounds(383, 457, 192, 38);
 		contentPanel.add(btnCrearTor);
+		
+		textOpc = new JTextField();
+		textOpc.setColumns(10);
+		textOpc.setBounds(57, 458, 197, 38);
+		contentPanel.add(textOpc);
+		
+		JLabel lblPremioregla = new JLabel("Premio/Regla");
+		lblPremioregla.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblPremioregla.setBounds(57, 420, 197, 26);
+		contentPanel.add(lblPremioregla);
 	}
 }

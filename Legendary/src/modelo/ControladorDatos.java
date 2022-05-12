@@ -58,7 +58,7 @@ public interface ControladorDatos {
 	
 	//Todo Plazas 
 	
-	public void reservarPlaza(Plaza plaz);
+	public void reservarPlaza(Reserva rev);
 	
 	
 }

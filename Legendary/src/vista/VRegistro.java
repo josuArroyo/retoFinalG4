@@ -37,43 +37,44 @@ public class VRegistro extends JDialog {
 	private JRadioButton rdbtnOtro;
 	private ButtonGroup grupo1;
 	private ControladorDatos datos = new BDAImplementacion();
-
+	
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		try {
-//			VRegistro dialog = new VRegistro();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	/**
 	 * Create the dialog.
 	 * 
-	 * @param ventanaPadre
+	 * @param vGestionDatos
 	 * 
-	 * @param datos
+	 * @param cargando
 	 * @param b
 	 * @wbp.parser.constructor
 	 */
-	public VRegistro(VLogin ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VRegistro(VLogin ventanaPadre, boolean modal,ControladorDatos datos2) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(true);
-
+		cargarVentana(true, datos2);
 	}
 
-	public VRegistro(VGestionDatos ventanaPadre, boolean modal, ControladorDatos datos2) {
+	public VRegistro(VGestionDatos ventanaPadre, boolean modal,  Usuario cargando,ControladorDatos datos2) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(false);
+		cargarVentana(false, datos);
+		
+		if (cargando != null){
+			System.out.println(cargando.getNombre());
+			textDniReg.setText(String.valueOf(cargando.getDni()));
+			textNombreReg.setText(String.valueOf(cargando.getNombre()));
+			textContraReg.setText(String.valueOf(cargando.getContrasenia()));
+			textTelReg.setText(String.valueOf(cargando.getTelefono()));
+			textCorreoReg.setText(String.valueOf(cargando.getCorreo()));
+			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));
+			
+		}
 	}
 
-	private void cargarVentana(boolean opc) {
+	private void cargarVentana(boolean opc,ControladorDatos datos2) {
 
 		setBounds(100, 100, 636, 636);
 		getContentPane().setLayout(new BorderLayout());
@@ -216,6 +217,7 @@ public class VRegistro extends JDialog {
 			btnModificar.setVisible(false);
 		} else if(!opc) {
 			btnAlta.setVisible(false);
+
 		}
 	}
 
@@ -322,4 +324,7 @@ public class VRegistro extends JDialog {
 		}
 		return correcto;
 	}
+	
+	
+	
 }

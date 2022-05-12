@@ -1,5 +1,7 @@
 package clases;
 
+import java.sql.Clob;
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Reserva {
@@ -7,13 +9,13 @@ public class Reserva {
 	//Atributos
 		private int id_Plaza;
 		private String dni;
-		private LocalDate fecha_ini;
-		private LocalDate fecha_fin;
+		private Date fecha_ini;
+		private Date fecha_fin;
 		private float coste;
 		
 		
 		//Constructor
-		public Reserva(int id_Plaza, String dni, LocalDate fecha_ini, LocalDate fecha_fin, float coste) {
+		public Reserva(int id_Plaza, String dni, Date fecha_ini, Date fecha_fin, float coste) {
 			super();
 			this.id_Plaza = id_Plaza;
 			this.dni = dni;
@@ -44,19 +46,19 @@ public class Reserva {
 			this.dni = dni;
 		}
 
-		public LocalDate getFecha_ini() {
+		public Date getFecha_ini() {
 			return fecha_ini;
 		}
 
-		public void setFecha_ini(LocalDate fecha_ini) {
+		public void setFecha_ini(Date fecha_ini) {
 			this.fecha_ini = fecha_ini;
 		}
 
-		public LocalDate getFecha_fin() {
+		public Date getFecha_fin() {
 			return fecha_fin;
 		}
 
-		public void setFecha_fin(LocalDate fecha_fin) {
+		public void setFecha_fin(Date fecha_fin) {
 			this.fecha_fin = fecha_fin;
 		}
 

@@ -118,8 +118,7 @@ public class VLogin extends JFrame {
 			VErrorLogin ventana =  new VErrorLogin();
 			ventana.setVisible(true);
 			textDni.setText("");
-			password.setText("");
-			
+			password.setText("");	
 		}
 		
 		

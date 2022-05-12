@@ -118,8 +118,5 @@ public class VCRUDHardware extends JDialog {
 		JButton btnNewButton_2 = new JButton("MODIFICAR");
 		btnNewButton_2.setBounds(424, 451, 160, 38);
 		contentPanel.add(btnNewButton_2);
-	}
-	
-		
-	
+	}	
 }

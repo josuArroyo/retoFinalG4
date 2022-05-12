@@ -8,6 +8,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Reserva;
+import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
@@ -16,6 +18,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 
@@ -105,6 +108,7 @@ public class VReserva extends JDialog {
 			textFFin.setText(null);
 			textFIni.setText(null);
 		}
+		BDAImplementacion impl = new BDAImplementacion();
 	}
 
 	protected void cerrarVentana() {

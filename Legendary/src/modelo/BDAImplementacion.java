@@ -30,6 +30,7 @@ public class BDAImplementacion implements ControladorDatos {
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para añiadir un usuario.
 	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
+	final String ObtenerUsuario = "Select distinct nombre, dni from Usuario group by nombre";
 	final String ReservarPlaza = "CALL `ReservaPlaza`(?, ?, ?, ?)";
 
 	// Metodo para conectarse a la base de datos.
@@ -229,8 +230,57 @@ public class BDAImplementacion implements ControladorDatos {
 	
 	@Override
 	public ArrayList<Usuario> listarUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+		ResultSet rs = null;
+		Usuario usu;
+		ArrayList<Usuario> sus = new ArrayList<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerDniUsu);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				usu = new Usuario();
+				usu.setDni(rs.getString("dni"));
+				usu.setNombre(rs.getString("Nombre"));
+				usu.setContrasenia(rs.getString("contrasenia"));
+				usu.setCorreo(rs.getString("correo"));
+				usu.setFechaNac(rs.getDate("fecha_nac").toLocalDate());
+				usu.setTelefono(rs.getInt("telefono"));
+				usu.setSexo(rs.getString("sexo"));
+				usu.setEsAdmin(rs.getBoolean("es_admin"));
+				
+				sus.add(usu);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en el cierre del ResultSet");
+				} catch (Exception ex) {
+					System.out.println("Error consulta props");
+				}
+			}
+
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return sus;
 	}
 
 	@Override
@@ -344,27 +394,25 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void reservarPlaza(Plaza plaz) {		
+	public void reservarPlaza(Reserva rev) {		
 		this.openConnection();
 		
 		try {
 			// Usamos la variable de conexion para usar la variable de ejecucion de
 			// sentencias.
-			stmt = con.prepareStatement(ReservaPlaza);
+			stmt = con.prepareStatement(ReservarPlaza);
 
 						// recogemos los valores por pantalla para enviarlos a la BD.
-			stmt.setString(1, usu.getDni());
-			stmt.setString(2, usu.getNombre());
-			stmt.setString(3, usu.getContrasenia());
-			stmt.setString(4, usu.getCorreo());
-			stmt.setDate(5, Date.valueOf(usu.getFechaNac()));
-			stmt.setInt(6, usu.getTelefono());
-			stmt.setString(7, usu.getSexo());
-			stmt.setBoolean(8, false);
-
+			stmt.setInt(1, rev.getId_Plaza());
+			stmt.setString(2, rev.getDni());
+			stmt.setDate(3, rev.getFecha_ini());
+			stmt.setDate(4, rev.getFecha_fin());
 			// Ejecutamos la sentecia de actualizacion.
 			stmt.executeUpdate();
-
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
 		}
 	}
 

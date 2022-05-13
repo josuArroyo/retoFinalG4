@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Usuario;
 import modelo.ControladorDatos;
 
 import javax.swing.JTable;
@@ -38,14 +39,14 @@ public class VTorneo extends JDialog {
 	/**
 	 * Create the dialog.
 	 * @param ventanaPadre 
-	 * @param datos 
 	 * @param modal 
+	 * @param usuario 
 	 * @param dni 
 	 */
 	
 	//
 	
-	public VTorneo(Menu ventanaPadre, boolean modal, ControladorDatos datos, String dni) {
+	public VTorneo(Menu ventanaPadre, boolean modal, Usuario usuario ) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		setBounds(100, 100, 684, 464);
@@ -74,9 +75,9 @@ public class VTorneo extends JDialog {
 		boolean found;
 		
 		JButton btnCrear = new JButton("Crear");
-		found = comprobarUsu(dni);
-		if(!found) {
-			btnCrear.setEnabled(found);
+		//found = comprobarUsu(usuario);
+		if(!usuario.isEsAdmin()) {
+			btnCrear.setEnabled(usuario.isEsAdmin());
 		}
 		btnCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -92,16 +93,16 @@ public class VTorneo extends JDialog {
 	
 	
 	//Metodo que devuelve un boolean que comprueba si el usuario logeado es un admin o un usuario diferente
-	private boolean comprobarUsu(String dni) {
-		boolean found;
-		
-		if(dni.equalsIgnoreCase("Admin")) {
-			found = true;
-		}else {
-			found = false;
-		}
-		
-		return found;
-		
-	}
+//	private boolean comprobarUsu(Usuario usuario) {
+//		boolean found;
+//		
+//		if(usuario.isEsAdmin()) {
+//			found = true;
+//		}else {
+//			found = false;
+//		}
+//		
+//		return found;
+//		
+//	}
 }

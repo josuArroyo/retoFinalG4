@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 public class VGestionDatos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private ControladorDatos datos= new BDAImplementacion();
+	private ControladorDatos datos = new BDAImplementacion();
 
 	/**
 	 * Launch the application.
@@ -29,11 +29,11 @@ public class VGestionDatos extends JDialog {
 
 	/**
 	 * Create the dialog.
-	 * @param datos 
-	 * @param b 
-	 * @param menu 
+	 * 
+	 * @param b
+	 * @param menu
 	 */
-	public VGestionDatos(Menu ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VGestionDatos(Menu ventanaPadre, boolean modal) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		setBounds(100, 100, 589, 319);
@@ -46,19 +46,20 @@ public class VGestionDatos extends JDialog {
 			lblNewLabel.setBounds(33, 50, 414, 24);
 			contentPanel.add(lblNewLabel);
 		}
-		
+
 		JComboBox comboNombreDni = new JComboBox();
 		comboNombreDni.setBounds(33, 107, 299, 37);
 		contentPanel.add(comboNombreDni);
-		
+
 		JButton btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int confirmar = JOptionPane.showConfirmDialog(null,"Estas seguro de que quieres eliminar a este usuario?");
-				
-				if(JOptionPane.OK_OPTION == confirmar) {
+				int confirmar = JOptionPane.showConfirmDialog(null,
+						"Estas seguro de que quieres eliminar a este usuario?");
+
+				if (JOptionPane.OK_OPTION == confirmar) {
 					JOptionPane.showMessageDialog(null, "El usuario se ha borrado.");
-				}else {
+				} else {
 					JOptionPane.showMessageDialog(null, "El usuario no se ha borrado.");
 				}
 			}
@@ -66,12 +67,12 @@ public class VGestionDatos extends JDialog {
 		btnBorrar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnBorrar.setBounds(33, 212, 129, 37);
 		contentPanel.add(btnBorrar);
-		
+
 		JButton btnCancelBorrar = new JButton("Cancelar");
 		btnCancelBorrar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnCancelBorrar.setBounds(391, 212, 143, 37);
 		contentPanel.add(btnCancelBorrar);
-		
+
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -84,7 +85,7 @@ public class VGestionDatos extends JDialog {
 	}
 
 	protected void cargarRegistro() {
-		VRegistro ventanaRegistro = new VRegistro(this,true,datos);
+		VRegistro ventanaRegistro = new VRegistro(this, true, datos);
 		ventanaRegistro.setVisible(true);
 	}
 }

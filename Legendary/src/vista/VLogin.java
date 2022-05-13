@@ -105,9 +105,10 @@ public class VLogin extends JFrame {
 		 dni = textDni.getText().toString();
 		 pass = String.valueOf(password.getPassword());
 		
-		if(datos.buscarUsuario(dni, pass) != null) {
+		 Usuario usuario = datos.buscarUsuario(dni, pass);
+		if( usuario != null) {
 			
-			Menu menu = new Menu(this, true,datos,dni);
+			Menu menu = new Menu(this, true, usuario ,dni);
 
 			menu.setVisible(true);
 			textDni.setText("");

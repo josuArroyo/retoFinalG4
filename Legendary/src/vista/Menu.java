@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Usuario;
 import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
@@ -19,7 +20,7 @@ import java.awt.event.ActionEvent;
 public class Menu extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private ControladorDatos datos = new BDAImplementacion();
+	
 
 	/**
 	 * Launch the application.
@@ -35,7 +36,7 @@ public class Menu extends JDialog {
 
 
 	private JButton btnComprar;
-	public Menu(JFrame ventanaPadre, boolean modal, ControladorDatos datos,String dni) {
+	public Menu(JFrame ventanaPadre, boolean modal, Usuario usuario ,String dni) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		
@@ -49,7 +50,7 @@ public class Menu extends JDialog {
 			btnComprar = new JButton("Comprar");
 			btnComprar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					comprar(datos,dni);
+					comprar(usuario);
 
 				}
 			});
@@ -63,7 +64,7 @@ public class Menu extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 
 
-					cargarTorneo(dni);
+					cargarTorneo(usuario);
           
 				}
 			});
@@ -94,26 +95,26 @@ public class Menu extends JDialog {
 			contentPanel.add(btnReservar);
 		}
 	}
-	protected void comprar(ControladorDatos datos, String dni) {
-		VComprar comprar = new VComprar(this, true,dni ,datos);
+	protected void comprar(Usuario usuario) {
+		VComprar comprar = new VComprar(this, true , usuario);
 		comprar.setVisible(true);
 		
 	}
 
 	protected void cargarDatos() {
-		VGestionDatos ventanaDatos = new VGestionDatos(this,true,datos);
+		VGestionDatos ventanaDatos = new VGestionDatos(this,true);
 		ventanaDatos.setVisible(true);
 		
 	}
 
 	protected void cargarReserva() {
-		VReserva ventanaReserva = new VReserva(this,true,datos);
+		VReserva ventanaReserva = new VReserva(this,true);
 		ventanaReserva.setVisible(true);
 		
 	}
 
-	protected void cargarTorneo(String dni) {
-		VTorneo ventanaTorneo = new VTorneo(this,true, datos,dni);
+	protected void cargarTorneo(Usuario usuario) {
+		VTorneo ventanaTorneo = new VTorneo(this,true,usuario);
 		ventanaTorneo.setVisible(true);
 		
 	}

@@ -27,6 +27,9 @@ public class BDAImplementacion implements ControladorDatos {
 
 	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
 	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
+	final String updateHardware = "UPDATE hardware SET hardware.precio= ?,hardware.stock = ? WHERE hardware.id_hardware =?";
+	final String altaHardware = "INSERT INTO hardware (id_hardware,nombre,precio,marca,tipo,stock,precio_coste) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
 	final String ObtenerJuego = "Select * from torneo";
 
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
@@ -140,7 +143,14 @@ public class BDAImplementacion implements ControladorDatos {
 
 				// Añadimos los valores de la variable rs a la variable usua
 				usua.setDni(rs.getString("dni"));
+				usua.setNombre(rs.getString("nombre"));
 				usua.setContrasenia(rs.getString("contrasenia"));
+				usua.setCorreo(rs.getString("Correo"));
+				usua.setFechaNac(rs.getDate("fecha_nac").toLocalDate());
+				usua.setTelefono(rs.getInt("telefono"));
+				usua.setSexo(rs.getString("sexo"));
+				usua.setEsAdmin(rs.getBoolean("es_admin"));
+				
 
 			} else {
 				// Instaciamos la variable usua a null
@@ -235,7 +245,32 @@ public class BDAImplementacion implements ControladorDatos {
 
 	@Override
 	public void aniadirHardware(Hardware har) {
-		// TODO Auto-generated method stub
+		// Te quiero atti
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(altaHardware);
+
+			stmt.setInt(1, har.getIdHW());
+			stmt.setString(2, har.getNombreHW());
+			stmt.setFloat(3, har.getPrecioHW());
+			stmt.setString(4, har.getMarcaHW());
+			stmt.setString(5, har.getTipoHW());
+			stmt.setInt(6, har.getStockHW());
+			stmt.setFloat(7, har.getPrecioCosteHW());
+
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			System.out.println("Error en alta SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -247,7 +282,28 @@ public class BDAImplementacion implements ControladorDatos {
 
 	@Override
 	public void modificarHardware(Hardware har) {
-		// TODO Auto-generated method stub
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(updateHardware);
+
+			stmt.setFloat(1, har.getPrecioHW());
+			stmt.setInt(2, har.getStockHW());
+			stmt.setInt(3, har.getIdHW());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+			System.out.println("Error en alta SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -257,17 +313,13 @@ public class BDAImplementacion implements ControladorDatos {
 		this.openConnection();
 
 		try {
-			
 
-			stmt  = con.prepareCall(ComprarProducto);
+			stmt = con.prepareCall(ComprarProducto);
 
 			stmt.setString(1, fac.getNombre());
 			stmt.setInt(2, fac.getCantidad());
 			stmt.setString(3, fac.getDni());
 			stmt.setDate(4, Date.valueOf(fac.getFechaFactura()));
-
-			
-			
 
 			stmt.executeUpdate();
 

@@ -26,11 +26,10 @@ public class VReserva extends JDialog {
 
 	/**
 	 * Create the dialog.
-	 * @param datos 
 	 * @param modal 
 	 * @param ventanaPadre 
 	 */
-	public VReserva(Menu ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VReserva(Menu ventanaPadre, boolean modal) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		setBounds(100, 100, 534, 376);

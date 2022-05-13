@@ -37,12 +37,12 @@ public class VComprar extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JComboBox comboBox;
 	private DefaultTableModel dtm;
-	private JScrollPane scroll;
+	private JScrollPane scroll = new JScrollPane();
 	ArrayList<Hardware> datosHardware;
-	private JTable table;
+	private JTable table = null;
 	private String dni;
 	private String prueba;
-	ControladorDatos datos = new BDAImplementacion();
+	ControladorDatos datos = null;
 	DefaultTableModel model;
 	
 
@@ -58,11 +58,13 @@ public class VComprar extends JDialog {
 	 * @param datos2 
 	 * @param dni 
 	 */
-	public VComprar(JDialog ventanaPadre, boolean modal, String dni, ControladorDatos datos2) {
+	public VComprar(JDialog ventanaPadre, boolean modal, String dni, ControladorDatos datos) {
+		
 		super(ventanaPadre);
 		this.setModal(modal);
 		this.dni=dni;
-
+		this.datos = datos;
+		
 		setBounds(100, 100, 672, 520);
 
 		getContentPane().setLayout(new BorderLayout());
@@ -104,8 +106,6 @@ public class VComprar extends JDialog {
 
 	protected void presentarTabla() {
 		//
-		JScrollPane scroll = new JScrollPane();
-		scroll = new JScrollPane();
 		// table = new JTable();
 		table = this.cargarTabla();
 		scroll.setViewportView(table);

@@ -21,19 +21,20 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// Sentencias SQL
 
-	//Usuarios
+	// Usuarios
 	final String ObtenerUsu = "select * from usuario where dni=? and contrasenia=?";
 	final String ObtenerDniUsu = "select * from usuario";
-	
-	//Hardware
+	final String ObtenerAdmin = "select * from usuario where dni = ?";
+
+	// Hardware
 	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
 	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
 
-	
-	//Torneos
+	// Torneos
 	final String ObtenerJuego = "Select distinct * from torneo group by juego";
-	final String ObtenerDatosTorneos= "select * from torneo where juego = ?";
-  
+	final String ObtenerDatosTorneos = "select * from torneo where juego = ?";
+	final String ObtenerDatosTorneoOficial = "select t.*, tof.* from torneo t, torneo_oficial tof where t.id_torneo = tof.id_torneo and juego = ?";
+	final String ObtenerDatosTorneoNoOficial = "select t.*, tor.* from torneo t, torneo_regla tor where t.id_torneo = tor.id_torneo and juego =? ";
 
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para añiadir un usuario.
@@ -258,22 +259,18 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void comprarHardware(Factura fac, String Dni) {
+	public void comprarHardware(Factura fac) {
 
 		this.openConnection();
 
 		try {
-			
 
-			stmt  = con.prepareCall(ComprarProducto);
+			stmt = con.prepareCall(ComprarProducto);
 
 			stmt.setString(1, fac.getNombre());
 			stmt.setInt(2, fac.getCantidad());
 			stmt.setString(3, fac.getDni());
 			stmt.setDate(4, Date.valueOf(fac.getFechaFactura()));
-
-			
-			
 
 			stmt.executeUpdate();
 
@@ -351,7 +348,11 @@ public class BDAImplementacion implements ControladorDatos {
 
 	@Override
 	public void aniadirTorneo(Torneo tor) {
-		// TODO Auto-generated method stub
+		
+		
+		this.openConnection();
+		
+		//stmt = con.prepareStatement(AltaUsuario)
 
 	}
 
@@ -371,18 +372,20 @@ public class BDAImplementacion implements ControladorDatos {
 	public ArrayList<Torneo> listarDatosTorneos(String juego) {
 		ArrayList<Torneo> listaTorneos = new ArrayList<>();
 		ResultSet rs = null;
-		
-		
+		ResultSet rs2 = null;
+		Torneo tor = null;
+
 		this.openConnection();
-		
+
 		try {
-			stmt = con.prepareStatement(ObtenerDatosTorneos);
-			
+			stmt = con.prepareStatement(ObtenerDatosTorneoOficial);
+
 			stmt.setString(1, juego);
 			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				Torneo tor = new Torneo();
+
+			while (rs.next()) {
+				tor = new TorneoOficial();
+
 				tor.setIdTorneo(rs.getInt("id_torneo"));
 				tor.setNombre(rs.getString("nombre"));
 				tor.setAforo(rs.getInt("aforo"));
@@ -390,16 +393,48 @@ public class BDAImplementacion implements ControladorDatos {
 				tor.setDir(rs.getString("direccion"));
 				tor.setFecha(rs.getDate("fecha").toLocalDate());
 				tor.setTipo(rs.getString("tipo"));
+				((TorneoOficial) tor).setPremio(rs.getString("premio"));
 				listaTorneos.add(tor);
-				
-				
+
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		}
+		try {
+			stmt = con.prepareStatement(ObtenerDatosTorneoNoOficial);
+
+			stmt.setString(1, juego);
+			rs2 = stmt.executeQuery();
+
+			while (rs2.next()) {
+				tor = new TorneoNoOficial();
+
+				tor.setIdTorneo(rs2.getInt("id_torneo"));
+				tor.setNombre(rs2.getString("nombre"));
+				tor.setAforo(rs2.getInt("aforo"));
+				tor.setJuego(rs2.getString("juego"));
+				tor.setDir(rs2.getString("direccion"));
+				tor.setFecha(rs2.getDate("fecha").toLocalDate());
+				tor.setTipo(rs2.getString("tipo"));
+				((TorneoNoOficial) tor).setReglas(rs2.getString("regla"));
+				listaTorneos.add(tor);
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
 			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (rs2 != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
@@ -412,11 +447,7 @@ public class BDAImplementacion implements ControladorDatos {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
-		
-		
+
 		return listaTorneos;
 	}
 
@@ -474,14 +505,10 @@ public class BDAImplementacion implements ControladorDatos {
 		return tipohw;
 	}
 
-
-	
-
 	public ArrayList<Torneo> listarJuegoTorneo() {
 		ResultSet rs = null;
 		Torneo tor;
 		ArrayList<Torneo> tipoJuego = new ArrayList<>();
-		
 
 		this.openConnection();
 
@@ -496,13 +523,12 @@ public class BDAImplementacion implements ControladorDatos {
 
 				tor.setJuego(rs.getString("juego").toString());
 				tipoJuego.add(tor);
-				
 
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
+		} finally {
 			// cerramos ResultSet
 			if (rs != null) {
 				try {
@@ -523,10 +549,34 @@ public class BDAImplementacion implements ControladorDatos {
 
 		}
 
-		
-		
 		return tipoJuego;
 
+	}
+
+	@Override
+	public boolean esAdmin(String dni) {
+
+		Usuario usu = null;
+		ResultSet rs = null;
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerAdmin);
+
+			stmt.setString(1, dni);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				usu.setEsAdmin(rs.getBoolean(""));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return false;
 	}
 
 }

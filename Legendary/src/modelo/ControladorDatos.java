@@ -20,6 +20,8 @@ public interface ControladorDatos {
 	
 	public boolean buscarUsuarioDni(String dni);
 	
+	public boolean esAdmin(String dni);
+	
 
 	public  ArrayList<Usuario> listarUsuarios();
 
@@ -32,7 +34,7 @@ public interface ControladorDatos {
 	
 	public void modificarHardware(Hardware har);
 	
-	public void comprarHardware(Factura fac, String Dni);
+	public void comprarHardware(Factura fac);
 	
 
 	public  ArrayList<Hardware> listarHardware();

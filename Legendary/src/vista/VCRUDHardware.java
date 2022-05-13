@@ -102,7 +102,7 @@ public class VCRUDHardware extends JDialog {
 		lblNewLabel_2_2.setBounds(48, 222, 86, 14);
 		contentPanel.add(lblNewLabel_2_2);
 		
-		JLabel lblNewLabel_2_2_1 = new JLabel("sTOCK");
+		JLabel lblNewLabel_2_2_1 = new JLabel("STOCK");
 		lblNewLabel_2_2_1.setFont(new Font("Algerian", Font.PLAIN, 20));
 		lblNewLabel_2_2_1.setBounds(338, 222, 86, 14);
 		contentPanel.add(lblNewLabel_2_2_1);
@@ -168,7 +168,7 @@ public class VCRUDHardware extends JDialog {
 		fak.setCantidad(Integer.valueOf(textCantidad.getText()));
 		fak.setDni(dni);
 		fak.setFechaFactura(LocalDate.now());   
-		datos.comprarHardware(fak, dni);
+		datos.comprarHardware(fak);
 
 		
 		

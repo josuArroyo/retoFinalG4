@@ -11,14 +11,19 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import clases.Torneo;
+import clases.TorneoNoOficial;
+import clases.TorneoOficial;
 import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
@@ -28,9 +33,11 @@ public class VTorneo extends JDialog {
 	private JTable table;
 	private JComboBox comboBox;
 	private JButton btnCrear;
-	private ControladorDatos datos = new BDAImplementacion();
+	private JScrollPane scroll = new JScrollPane();
+	private ControladorDatos datos = null;
 	private DefaultTableModel model;
 	private ArrayList<Torneo> listaTorneos = new ArrayList<>();
+	private String dni;
 
 	/**
 	 * Launch the application.
@@ -58,6 +65,8 @@ public class VTorneo extends JDialog {
 	public VTorneo(Menu ventanaPadre, boolean modal, ControladorDatos datos, String dni) {
 		super(ventanaPadre);
 		this.setModal(modal);
+		this.datos = datos;
+		this.dni = dni;
 		setBounds(100, 100, 684, 464);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -83,7 +92,7 @@ public class VTorneo extends JDialog {
 		//Variable para compobar si es admin o no para deshabilitar o habilitar el boton de crear
 		boolean found;
 		
-		btnCrear = new JButton("Crear");
+		btnCrear = 	new JButton("Crear");
 		found = comprobarUsu(dni);
 		if(!found) {
 			btnCrear.setEnabled(found);
@@ -110,8 +119,6 @@ public class VTorneo extends JDialog {
 	
 	
 	protected void presentarTabla() {
-		JScrollPane scroll = new JScrollPane();
-		scroll = new JScrollPane();
 		
 		table = this.cargarTabla();
 		scroll.setViewportView(table);
@@ -119,13 +126,47 @@ public class VTorneo extends JDialog {
 		contentPanel.add(scroll);
 		scroll.setBounds(50, 171, 544, 186);
 		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				seleccionarTorneo(dni);
+			}
+		});
+		
+	}
+
+
+	protected void seleccionarTorneo(String dni2) {
+		int row =  table.getSelectedRow();
+		String text = (String) table.getValueAt(row, 0);
+		int id = Integer.parseInt(text);
+		
+		Torneo torne = new Torneo();
+		for(Torneo tor : listaTorneos) {
+			if(tor.getIdTorneo() == id) {
+				torne = tor;
+			}
+		}
+		
+		int confirmar = JOptionPane.showConfirmDialog(null,"Estas seguro de que quieres inscribirte a este torneo?");
+		
+		if(JOptionPane.OK_OPTION == confirmar) {
+			
+			
+			JOptionPane.showMessageDialog(null, "Te has inscrito al torneo.");
+		//	sdf
+			
+		}else {
+			JOptionPane.showMessageDialog(null, "No te has inscrito al torneo.");
+		}
+		
+		
 	}
 
 
 	private JTable cargarTabla() {
 		
-		String[] columnNames = { "id_hardware", "nombre", "precio", "marca", "tipo", "stock", "precio_coste" };
-		String[] columna = new String[7];
+		String[] columnNames = { "id_torneo", "nombre", "aforo", "juego", "direccion", "fecha", "tipo","Regla/Premio" };
+		String[] columna = new String[8];
 		model = null;
 		model = new DefaultTableModel(null, columnNames);
 		model.setRowCount(0);
@@ -143,6 +184,11 @@ public class VTorneo extends JDialog {
 			columna[4] = tor.getDir();
 			columna[5] = String.valueOf(tor.getFecha());
 			columna[6] = tor.getTipo();
+			if(tor instanceof TorneoOficial) {
+				columna[7] = ((TorneoOficial) tor).getPremio();
+			}else{
+				columna [7] = ((TorneoNoOficial) tor).getReglas();
+			}
 			
 			model.addRow(columna);
 			
@@ -154,9 +200,9 @@ public class VTorneo extends JDialog {
 
 	protected void cargarAniadirTorneo() {
 		
-		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo(this,true,datos);
+		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo(this,true);
 		ventanaAniadirTor.setVisible(true);
-		
+
 	}
 
 

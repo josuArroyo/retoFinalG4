@@ -3,19 +3,29 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Torneo;
+import clases.TorneoNoOficial;
+import clases.TorneoOficial;
+
+import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 
 public class VAniadirTorneo extends JDialog {
@@ -27,8 +37,11 @@ public class VAniadirTorneo extends JDialog {
 	private JTextField textJuego;
 	private JTextField textFecha;
 	private JTextField textDir;
-	private JTextField textOpc;
-	
+	private JTextField textPremio;
+	private JRadioButton rdbtnOficial;
+	private JRadioButton rdbtnNoOficial;
+	private ButtonGroup grupo1;
+	ControladorDatos datos = new BDAImplementacion();
 	
 	/**
 	 * Launch the application.
@@ -40,7 +53,7 @@ public class VAniadirTorneo extends JDialog {
 	 * @param modal 
 	 * @param ventanaPadre 
 	 */
-	public VAniadirTorneo(VTorneo ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VAniadirTorneo(VTorneo ventanaPadre, boolean modal) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		setBounds(100, 100, 699, 589);
@@ -109,32 +122,91 @@ public class VAniadirTorneo extends JDialog {
 		textDir.setBounds(378, 331, 197, 38);
 		contentPanel.add(textDir);
 		
-		JRadioButton rdbtnOficial = new JRadioButton("OFICIAL");
+		rdbtnOficial = new JRadioButton("OFICIAL");
 		rdbtnOficial.setBounds(378, 405, 77, 23);
 		contentPanel.add(rdbtnOficial);
 		
-		JRadioButton rdbtnNoOficial = new JRadioButton("NO-OFICIAL");
+		rdbtnNoOficial = new JRadioButton("NO-OFICIAL");
 		rdbtnNoOficial.setBounds(490, 405, 99, 23);
 		contentPanel.add(rdbtnNoOficial);
+		
+		grupo1 = new ButtonGroup();
+		grupo1.add(rdbtnNoOficial);
+		grupo1.add(rdbtnOficial);
 		
 		JButton btnCrearTor = new JButton("Crear");
 		btnCrearTor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				crearTorneo();
 			}
 		});
 		btnCrearTor.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnCrearTor.setBounds(383, 457, 192, 38);
 		contentPanel.add(btnCrearTor);
 		
-		textOpc = new JTextField();
-		textOpc.setColumns(10);
-		textOpc.setBounds(57, 458, 197, 38);
-		contentPanel.add(textOpc);
+		textPremio = new JTextField();
+		textPremio.setColumns(10);
+		textPremio.setBounds(57, 458, 197, 38);
+		contentPanel.add(textPremio);
 		
 		JLabel lblPremioregla = new JLabel("Premio/Regla");
 		lblPremioregla.setFont(new Font("Algerian", Font.PLAIN, 20));
 		lblPremioregla.setBounds(57, 420, 197, 26);
 		contentPanel.add(lblPremioregla);
+	}
+
+
+	protected void crearTorneo() {
+		
+		Torneo tor = AniadirPantallaTorneo();
+		//String opcion = grupo1.getSelection().getActionCommand();
+		String opcionOficial = rdbtnOficial.getText().toString();
+		String opcionNoOfficial = rdbtnNoOficial.getText().toString();
+		System.out.printf(opcionOficial,opcionNoOfficial);
+		datos.aniadirTorneo(tor,opcionOficial,opcionNoOfficial);
+		JOptionPane.showMessageDialog(this, "Torneo dado de alta");
+		
+		
+		textId.setText("");
+		textNombre.setText("");
+		textAforo.setText("");
+		textJuego.setText("");
+		textFecha.setText("");
+		textDir.setText("");
+		textPremio.setText("");
+		
+		
+	}
+
+
+	private Torneo AniadirPantallaTorneo() {
+		
+		Torneo tor = new Torneo();
+		LocalDate fecha;
+		
+		tor.setIdTorneo(Integer.parseInt(textId.getText()));
+		tor.setNombre(textNombre.getText());
+		tor.setAforo(Integer.parseInt(textAforo.getText()));
+		tor.setJuego(textJuego.getText());
+		DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		fecha = LocalDate.parse(textFecha.getText(), formateador);
+		tor.setFecha(fecha);
+		tor.setDir(textDir.getText());
+		if (rdbtnOficial.isSelected()) {
+			tor.setTipo(rdbtnOficial.getText());
+
+		}else {
+			tor.setTipo(rdbtnNoOficial.getText());
+		}
+		
+		if (tor instanceof TorneoOficial) {
+			((TorneoOficial) tor).setPremio(textPremio.getText());			
+		}		
+		if (tor instanceof TorneoNoOficial) {
+			((TorneoNoOficial) tor).setReglas(textPremio.getText());
+		}
+			
+		
+		return tor;
 	}
 }

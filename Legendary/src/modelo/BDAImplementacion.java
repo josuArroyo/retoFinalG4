@@ -35,6 +35,8 @@ public class BDAImplementacion implements ControladorDatos {
 	final String ObtenerDatosTorneos = "select * from torneo where juego = ?";
 	final String ObtenerDatosTorneoOficial = "select t.*, tof.* from torneo t, torneo_oficial tof where t.id_torneo = tof.id_torneo and juego = ?";
 	final String ObtenerDatosTorneoNoOficial = "select t.*, tor.* from torneo t, torneo_regla tor where t.id_torneo = tor.id_torneo and juego =? ";
+	final String AltaTorneo = "CALL `AÒadirTorneo`(?, ?, ?, ?, ?, ?, ?)";
+	final String Inscribirse = "CALL `Inscribir`(?,?)";
 
 	// El procedimiento recibira por pantalla los paremetro que se introduciran en
 	// la BD para a√±iadir un usuario.
@@ -347,13 +349,38 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void aniadirTorneo(Torneo tor) {
-		
-		
-		this.openConnection();
-		
-		//stmt = con.prepareStatement(AltaUsuario)
+	public void aniadirTorneo(Torneo tor, String opcionOficial, String opcionNoOfficial) {
 
+		this.openConnection();
+
+		try {
+			stmt = con.prepareCall(AltaTorneo);
+			
+			System.out.println(tor.getTipo());
+
+			stmt.setInt(1, tor.getIdTorneo());
+			stmt.setString(2, tor.getNombre());
+			stmt.setInt(3, tor.getAforo());
+			stmt.setString(4, tor.getJuego());
+			stmt.setDate(5, Date.valueOf(tor.getFecha()));
+			stmt.setString(6, tor.getTipo());
+			if (tor instanceof TorneoOficial) {
+				stmt.setString(7, ((TorneoOficial) tor).getPremio());
+			} else {
+				stmt.setString(7, ((TorneoNoOficial) tor).getReglas());
+			}
+
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			System.out.println("Error en alta SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -577,6 +604,33 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 
 		return false;
+	}
+
+	@Override
+	public void inscribirse(Usuario usu, Torneo tor) {
+		
+		this.openConnection();
+		
+		try {
+			stmt = con.prepareStatement(Inscribirse);
+			
+			stmt.setString(1, usu.getDni());
+			stmt.setInt(2, tor.getIdTorneo());
+			
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 }

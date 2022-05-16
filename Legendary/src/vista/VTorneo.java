@@ -151,10 +151,12 @@ public class VTorneo extends JDialog {
 		
 		if(JOptionPane.OK_OPTION == confirmar) {
 			
-			JOptionPane.showMessageDialog(null, "El usuario se ha borrado.");
+			
+			JOptionPane.showMessageDialog(null, "Te has inscrito al torneo.");
+		//	sdf
 			
 		}else {
-			JOptionPane.showMessageDialog(null, "El usuario no se ha borrado.");
+			JOptionPane.showMessageDialog(null, "No te has inscrito al torneo.");
 		}
 		
 		
@@ -198,9 +200,9 @@ public class VTorneo extends JDialog {
 
 	protected void cargarAniadirTorneo() {
 		
-		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo(this,true,datos);
+		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo(this,true);
 		ventanaAniadirTor.setVisible(true);
-		
+
 	}
 
 

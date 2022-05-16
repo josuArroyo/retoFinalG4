@@ -46,11 +46,11 @@ public interface ControladorDatos {
 	
 	// Todo Torneo 
 	
-	public void aniadirTorneo(Torneo tor);
+	public void aniadirTorneo(Torneo tor, String opcion, String opcionNoOfficial);
 	
 	public void buscarTorneo(Torneo tor);
 	
-
+	public void inscribirse(Usuario usu,Torneo tor);
 
 	public ArrayList<Torneo> listarTorneos();
 	

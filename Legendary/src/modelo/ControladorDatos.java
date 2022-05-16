@@ -14,7 +14,7 @@ public interface ControladorDatos {
 	
 	public void modificarUsuario(Usuario usu);
 	
-	public void eliminarUsuario(String dni,String nombre);
+	public void eliminarUsuario(String dni);
 	
 	public Usuario buscarUsuario(String dni, String contrasenia);
 	
@@ -59,7 +59,7 @@ public interface ControladorDatos {
 	
 	//Todo Plazas 
 	
-	public void reservarPlaza(Plaza plaz);
+	public void reservarPlaza(Reserva rev);
 	
 	
 }

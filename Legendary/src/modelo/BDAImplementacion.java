@@ -22,20 +22,28 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// Sentencias SQL
 
+	//Usuarios
 	final String ObtenerUsu = "select * from usuario where dni=? and contrasenia=?";
 	final String ObtenerDniUsu = "select * from usuario";
+	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
+	final String ObtenerUsuario = "Select distinct nombre, dni from Usuario group by nombre";
+	final String EliminarUsuario = "delete from usuario where dni = ?";
+	final String ModificarUsuario = "{CALL `ModificarUsuario`(?,?,?,?,?,?,?,?)}";
 
+	//Hardware
 	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
 	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
 	final String updateHardware = "UPDATE hardware SET hardware.precio= ?,hardware.stock = ? WHERE hardware.id_hardware =?";
 	final String altaHardware = "INSERT INTO hardware (id_hardware,nombre,precio,marca,tipo,stock,precio_coste) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-	final String ObtenerJuego = "Select * from torneo";
-
-	// El procedimiento recibira por pantalla los paremetro que se introduciran en
-	// la BD para añiadir un usuario.
-	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
 	final String ComprarProducto = "{CALL `ComprarProducto`(?,?,?,?)}";
+	
+	//Torneo
+	final String ObtenerJuego = "Select * from torneo";
+	
+	//Reservas
+	final String ReservarPlaza = "CALL `ReservaPlaza`(?, ?, ?, ?)";
+	
+
 
 	// Metodo para conectarse a la base de datos.
 	public void openConnection() {
@@ -49,6 +57,7 @@ public class BDAImplementacion implements ControladorDatos {
 			con = DriverManager.getConnection(url, user, password);
 		} catch (SQLException e) {
 			System.out.println("Error al intentar abrir la BD");
+			
 			e.printStackTrace();
 		}
 	}
@@ -63,7 +72,7 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 	}
 
-	// Metodo para añadir Usuarios.
+	// Metodo para aniadir Usuarios.
 	@Override
 	public void altaUsuario(Usuario usu) {
 		// TODO Auto-generated method stub
@@ -76,7 +85,7 @@ public class BDAImplementacion implements ControladorDatos {
 			// sentencias.
 			stmt = con.prepareStatement(AltaUsuario);
 
-			// recogemos los valores por pantalle para enviarlos a la BD.
+			// recogemos los valores por pantalla para enviarlos a la BD.
 			stmt.setString(1, usu.getDni());
 			stmt.setString(2, usu.getNombre());
 			stmt.setString(3, usu.getContrasenia());
@@ -104,13 +113,63 @@ public class BDAImplementacion implements ControladorDatos {
 
 	@Override
 	public void modificarUsuario(Usuario usu) {
-		// TODO Auto-generated method stub
+	
+		this.openConnection();
+		
+		try {
+			
+			stmt = con.prepareStatement(ModificarUsuario);
+			
+			stmt.setString(1, usu.getDni());
+			stmt.setString(2, usu.getNombre());
+			stmt.setString(3, usu.getContrasenia());	
+			stmt.setString(4, usu.getCorreo());
+			stmt.setDate(5, Date.valueOf(usu.getFechaNac()));
+			stmt.setInt(6, usu.getTelefono());
+			stmt.setString(7, usu.getSexo());
+			stmt.setBoolean(8, usu.isEsAdmin());
+			
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
 	@Override
-	public void eliminarUsuario(String dni, String nombre) {
-		// TODO Auto-generated method stub
+	public void eliminarUsuario(String dni) {
+		
+		
+		this.openConnection();
+		
+		try {
+			
+			stmt = con.prepareStatement(EliminarUsuario);
+			
+			stmt.setString(1, dni);
+			
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -236,11 +295,61 @@ public class BDAImplementacion implements ControladorDatos {
 
 		return found;
 	}
-
+	
+	
 	@Override
 	public ArrayList<Usuario> listarUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+		ResultSet rs = null;
+		Usuario usu;
+		ArrayList<Usuario> sus = new ArrayList<>();
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerDniUsu);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				usu = new Usuario();
+				usu.setDni(rs.getString("dni"));
+				usu.setNombre(rs.getString("Nombre"));
+				usu.setContrasenia(rs.getString("contrasenia"));
+				usu.setCorreo(rs.getString("correo"));
+				usu.setFechaNac(rs.getDate("fecha_nac").toLocalDate());
+				usu.setTelefono(rs.getInt("telefono"));
+				usu.setSexo(rs.getString("sexo"));
+				usu.setEsAdmin(rs.getBoolean("es_admin"));
+				
+				sus.add(usu);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en el cierre del ResultSet");
+				} catch (Exception ex) {
+					System.out.println("Error consulta props");
+				}
+			}
+
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return sus;
 	}
 
 	@Override
@@ -420,9 +529,26 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void reservarPlaza(Plaza plaz) {
-		// TODO Auto-generated method stub
+	public void reservarPlaza(Reserva rev) {		
+		this.openConnection();
+		
+		try {
+			// Usamos la variable de conexion para usar la variable de ejecucion de
+			// sentencias.
+			stmt = con.prepareStatement(ReservarPlaza);
 
+						// recogemos los valores por pantalla para enviarlos a la BD.
+			stmt.setInt(1, rev.getId_Plaza());
+			stmt.setString(2, rev.getDni());
+			stmt.setDate(3, rev.getFecha_ini());
+			stmt.setDate(4, rev.getFecha_fin());
+			// Ejecutamos la sentecia de actualizacion.
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
 	}
 
 	@Override

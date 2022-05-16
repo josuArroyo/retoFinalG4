@@ -52,6 +52,7 @@ public class VComprar extends JDialog {
 	 * Launch the application.
 	 */
 
+
 	/**
 	 * Create the dialog.
 	 * 

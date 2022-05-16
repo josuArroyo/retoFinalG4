@@ -9,11 +9,14 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Hardware;
 import clases.Usuario;
 import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
@@ -37,43 +40,43 @@ public class VRegistro extends JDialog {
 	private JRadioButton rdbtnOtro;
 	private ButtonGroup grupo1;
 	private ControladorDatos datos = new BDAImplementacion();
-
+	
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		try {
-//			VRegistro dialog = new VRegistro();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	/**
 	 * Create the dialog.
 	 * 
-	 * @param ventanaPadre
+	 * @param vGestionDatos
 	 * 
-	 * @param datos
+	 * @param cargando
 	 * @param b
 	 * @wbp.parser.constructor
 	 */
-	public VRegistro(VLogin ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VRegistro(VLogin ventanaPadre, boolean modal,Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(true);
-
+		cargarVentana(true,usuario);
 	}
 
-	public VRegistro(VGestionDatos ventanaPadre, boolean modal, ControladorDatos datos2) {
+	public VRegistro(Menu ventanaPadre, boolean modal,  Usuario cargando) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(false);
+		cargarVentana(false, cargando);
+		
+		if (cargando != null){
+			textDniReg.setText(String.valueOf(cargando.getDni()));
+			textNombreReg.setText(String.valueOf(cargando.getNombre()));
+			textContraReg.setText(String.valueOf(cargando.getContrasenia()));
+			textTelReg.setText(String.valueOf(cargando.getTelefono()));
+			textCorreoReg.setText(String.valueOf(cargando.getCorreo()));
+			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));
+			
+		}
 	}
 
-	private void cargarVentana(boolean opc) {
+	private void cargarVentana(boolean opc,Usuario usu) {
 
 		setBounds(100, 100, 636, 636);
 		getContentPane().setLayout(new BorderLayout());
@@ -188,7 +191,7 @@ public class VRegistro extends JDialog {
 		btnAlta = new JButton("Alta");
 		btnAlta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				alta(datos);
+				alta();
 
 			}
 		});
@@ -198,6 +201,11 @@ public class VRegistro extends JDialog {
 		contentPanel.add(btnAlta);
 
 		JButton btnModificar = new JButton("MODIFICAR");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modificarDatos(usu);
+			}
+		});
 		btnModificar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnModificar.setBounds(204, 528, 158, 46);
 		contentPanel.add(btnModificar);
@@ -216,14 +224,35 @@ public class VRegistro extends JDialog {
 			btnModificar.setVisible(false);
 		} else if(!opc) {
 			btnAlta.setVisible(false);
+
 		}
+	}
+
+	protected void modificarDatos(Usuario usuario) {
+				
+		Usuario usu = ModiPantallaUsu();
+		datos.modificarUsuario(usuario);
+		JOptionPane.showMessageDialog(this, "Usuario modificado con éxito");
+		
+	}
+
+	private Usuario ModiPantallaUsu() {
+		
+		Usuario usu = new Usuario();
+
+		usu.setDni(textDniReg.getText());
+		usu.setContrasenia(textContraReg.getText());
+		usu.setNombre(textNombreReg.getText());
+
+		return usu;
+		
 	}
 
 	protected void cancelar() {
 		this.dispose();
 	}
 
-	protected void alta(ControladorDatos datos) {
+	protected void alta() {
 
 		Usuario us = new Usuario();
 		LocalDate fecha;
@@ -322,4 +351,7 @@ public class VRegistro extends JDialog {
 		}
 		return correcto;
 	}
+	
+	
+	
 }

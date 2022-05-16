@@ -145,6 +145,7 @@ public class VCRUDHardware extends JDialog {
 		lblNewLabel_2_2_1.setBounds(338, 222, 86, 14);
 		contentPanel.add(lblNewLabel_2_2_1);
 
+
 		textTipo = new JTextField();
 		textTipo.setColumns(10);
 		textTipo.setBounds(48, 257, 207, 31);
@@ -295,4 +296,6 @@ public class VCRUDHardware extends JDialog {
 		datos.comprarHardware(fak, dni);
 
 	}
+
+		
 }

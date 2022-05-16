@@ -30,6 +30,7 @@ public class VLogin extends JFrame {
 	private JButton btnRegis;
 	private String dni;
 	private String pass;
+	private Usuario usuario;
 
 	private ControladorDatos datos = new BDAImplementacion();
 	
@@ -41,7 +42,7 @@ public class VLogin extends JFrame {
 	 * Create the frame.
 	 * @param datos 
 	 */
-	public VLogin(ControladorDatos datos) {
+	public VLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 482, 334);
 		contentPane = new JPanel();
@@ -70,7 +71,7 @@ public class VLogin extends JFrame {
 			 public void actionPerformed(ActionEvent e) {
 				 dni = textDni.getText().toString();
 				 pass = String.valueOf(password.getPassword());
-				 comprobar(datos, dni,pass);
+				 comprobar(dni,pass);
 			}
 		});
 		btnLogin.setBounds(272, 225, 140, 59);
@@ -94,21 +95,21 @@ public class VLogin extends JFrame {
 
 
 	protected void cargarRegistro() {
-		VRegistro registro= new VRegistro(this,true,datos);
+		VRegistro registro= new VRegistro(this,true,usuario);
 		registro.setVisible(true);
 		
 	}
 
-	protected void comprobar(ControladorDatos datos, String dni, String pass) {
+	protected void comprobar( String dni, String pass) {
 		
 		boolean Registro = false;
 		 dni = textDni.getText().toString();
 		 pass = String.valueOf(password.getPassword());
 		
-		 Usuario usuario = datos.buscarUsuario(dni, pass);
+		usuario = datos.buscarUsuario(dni, pass);
 		if( usuario != null) {
 			
-			Menu menu = new Menu(this, true, usuario ,dni);
+			Menu menu = new Menu(this, true, usuario);
 
 			menu.setVisible(true);
 			textDni.setText("");
@@ -118,8 +119,7 @@ public class VLogin extends JFrame {
 			VErrorLogin ventana =  new VErrorLogin();
 			ventana.setVisible(true);
 			textDni.setText("");
-			password.setText("");
-			
+			password.setText("");	
 		}
 		
 		

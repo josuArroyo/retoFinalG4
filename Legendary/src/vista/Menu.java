@@ -36,7 +36,7 @@ public class Menu extends JDialog {
 
 
 	private JButton btnComprar;
-	public Menu(JFrame ventanaPadre, boolean modal, Usuario usuario ,String dni) {
+	public Menu(JFrame ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		
@@ -76,7 +76,7 @@ public class Menu extends JDialog {
 			JButton btnDatos = new JButton("Datos");
 			btnDatos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cargarDatos();
+					cargarDatos(usuario);
 				}
 			});
 			btnDatos.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -101,9 +101,15 @@ public class Menu extends JDialog {
 		
 	}
 
-	protected void cargarDatos() {
-		VGestionDatos ventanaDatos = new VGestionDatos(this,true);
-		ventanaDatos.setVisible(true);
+	protected void cargarDatos(Usuario usuario) {
+		if(usuario.isEsAdmin()) {
+			VGestionDatos ventanaDatos = new VGestionDatos(this,true,usuario);
+			ventanaDatos.setVisible(true);
+		}else {
+			VRegistro ventanaDatos = new VRegistro(this,true,usuario);
+			ventanaDatos.setVisible(true);
+		}
+		
 		
 	}
 

@@ -12,7 +12,7 @@ public class Main {
 		
 		ControladorDatos datos = new BDAImplementacion();
 		
-		VLogin principal = new VLogin(datos);
+		VLogin principal = new VLogin();
 		principal.setVisible(true);
 		
 		

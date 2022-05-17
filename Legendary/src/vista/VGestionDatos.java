@@ -65,10 +65,10 @@ public class VGestionDatos extends JDialog {
 		JButton btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int confirmar = JOptionPane.showConfirmDialog(null,
-						"Estas seguro de que quieres eliminar a este usuario?");
+				int confirmar = JOptionPane.showConfirmDialog(null,"Estas seguro de que quieres eliminar a este usuario?");
 
 				if (JOptionPane.OK_OPTION == confirmar) {
+					System.out.println(comboBox.getSelectedItem().toString().substring(0,9));
 					datos.eliminarUsuario(comboBox.getSelectedItem().toString().substring(0,9));
 					JOptionPane.showMessageDialog(null, "El usuario se ha borrado.");
 				} else {

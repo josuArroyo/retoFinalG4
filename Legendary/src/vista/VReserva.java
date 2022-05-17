@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clases.Reserva;
+import clases.Usuario;
 import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
@@ -27,6 +28,8 @@ public class VReserva extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textFIni;
 	private JTextField textFFin;
+	private JTextField textNumPlaza;
+	private ControladorDatos datos = new BDAImplementacion();
 
 	/**
 	 * Launch the application.
@@ -36,8 +39,9 @@ public class VReserva extends JDialog {
 	 * Create the dialog.
 	 * @param modal 
 	 * @param ventanaPadre 
+	 * @param usuario 
 	 */
-	public VReserva(Menu ventanaPadre, boolean modal) {
+	public VReserva(Menu ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		setBounds(100, 100, 534, 376);
@@ -73,7 +77,14 @@ public class VReserva extends JDialog {
 		JButton btnReservar = new JButton("RESERVAR");
 		btnReservar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Comprobar();
+				boolean bien;
+				bien = comprobar();
+				
+				if (bien) {
+					reservarPlaza(usuario);
+				}
+				
+				
 			}
 		});
 		btnReservar.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -89,29 +100,80 @@ public class VReserva extends JDialog {
 		btnVolver.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnVolver.setBounds(44, 277, 209, 49);
 		contentPanel.add(btnVolver);
+		
+		textNumPlaza = new JTextField();
+		textNumPlaza.setEditable(false);
+		textNumPlaza.setBounds(33, 139, 39, 26);
+		contentPanel.add(textNumPlaza);
+		textNumPlaza.setColumns(10);
+		
+		JLabel lblplaza = new JLabel("id plaza");
+		lblplaza.setBounds(33, 176, 46, 14);
+		contentPanel.add(lblplaza);
+		
+		rellenarPlaza();
 	}
 
-	protected void Comprobar() {
+	private void rellenarPlaza() {
+		String id_Plaza = String.valueOf(datos.traerIDPlaza());
+		
+		if(id_Plaza.equals(0)) {
+			
+		}else {
+			textNumPlaza.setText(id_Plaza);
+		}
+		
+	}
+
+	protected void reservarPlaza(Usuario usuario) {
+		
+		Reserva rev = new Reserva();
+		Date fecha;
+		boolean found;
+		
+		rev.setId_Plaza(Integer.valueOf(textNumPlaza.getText()));
+		rev.setDni(usuario.getDni());
+		rev.setFecha_ini(Date.valueOf(textFIni.getText()));
+		rev.setFecha_fin(Date.valueOf(textFFin.getText()));
+		datos.reservarPlaza(rev);
+		textFFin.setText(null);
+		textFIni.setText(null);
+		JOptionPane.showMessageDialog(null, "Reserva completada");
+		this.dispose();
+		
+	}
+
+	protected boolean comprobar() {
+		boolean bien = true;
+		
 		if (textFFin.getText().equalsIgnoreCase(textFIni.getText())) {
 			JOptionPane.showMessageDialog(null, "Las fechas son idénticas, introduce unas nuevas");
 			textFFin.setText(null);
 			textFIni.setText(null);
+			bien = false;
 		}
 		else if (LocalDate.parse(textFIni.getText()).isBefore( LocalDate.now()) || LocalDate.parse(textFFin.getText()).isBefore( LocalDate.now())) {
 			JOptionPane.showMessageDialog(null, "La fecha de inicio y/o la fecha de fin son anteriores a la fecha actual, introduce unas nuevas ");
 			textFFin.setText(null);
 			textFIni.setText(null);
+			bien = false;
 		}
 		else if (LocalDate.parse(textFFin.getText()).isBefore(LocalDate.parse(textFIni.getText()))) {
 			JOptionPane.showMessageDialog(null, "La fecha de fin de reserva es anterior a la de inicio, vuelva a introducirlas");
 			textFFin.setText(null);
 			textFIni.setText(null);
+			bien = false;
+		}else if(Integer.valueOf(textNumPlaza.getText()) == 0){
+			JOptionPane.showMessageDialog(null, "No hay plazas disponible es estos momentos, lo sentimos");
+			textFFin.setText(null);
+			textFIni.setText(null);
+			bien = false;
 		}
 		BDAImplementacion impl = new BDAImplementacion();
+		return bien;
 	}
 
 	protected void cerrarVentana() {
 		this.dispose();		
 	}
-
 }

@@ -20,7 +20,6 @@ public interface ControladorDatos {
 	
 	public boolean buscarUsuarioDni(String dni);
 	
-
 	public  ArrayList<Usuario> listarUsuarios();
 
 	
@@ -28,14 +27,9 @@ public interface ControladorDatos {
 	
 	public void aniadirHardware(Hardware har);
 	
-	public Hardware buscarHardware(Hardware har);
-	
 	public void modificarHardware(Hardware har);
 	
 	public void comprarHardware(Factura fac, String Dni);
-	
-
-	public  ArrayList<Hardware> listarHardware();
 	
 	public  ArrayList<Hardware>  listarDatosHardware(String  tipo);
 	
@@ -46,20 +40,17 @@ public interface ControladorDatos {
 	
 	public void aniadirTorneo(Torneo tor);
 	
-	public void buscarTorneo(Torneo tor);
+	public ArrayList<Torneo> listarDatosTorneos(String juego);
 	
-
-
-	public ArrayList<Torneo> listarTorneos();
+	public ArrayList<Torneo> listarJuegoTorneo();
 	
-	public ArrayList<Torneo> listarDatosTorneos();
-	
-	public ArrayList<Torneo> listarTipoTorneo();
+	public void inscribirse(Usuario usu, Torneo tor);
 
 	
 	//Todo Plazas 
 	
 	public void reservarPlaza(Reserva rev);
 	
+	public int traerIDPlaza();
 	
 }

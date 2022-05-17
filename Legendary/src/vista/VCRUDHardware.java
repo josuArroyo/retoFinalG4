@@ -48,6 +48,7 @@ public class VCRUDHardware extends JDialog {
 	private JButton btnAniadir;
 	private JLabel lblNewLabel_3;
 	private boolean tiene = false;
+	private Usuario usu;
 
 	/**
 	 * Launch the application.
@@ -62,22 +63,21 @@ public class VCRUDHardware extends JDialog {
 	 * @param vComprar
 	 * @wbp.parser.constructor
 	 */
-	public VCRUDHardware(VComprar ventanaPadre, boolean modal, ControladorDatos datos, Hardware hardw,
-			Usuario usuario) {
+	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Hardware hardw,Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		this.hardw = hardw;
+		this.usu = usuario; 
 		cargarVentana();
 		textPrecioCoste.setEnabled(false);
 		btnAniadir.setEnabled(false);
 		btnModificar.setEnabled(false);
 	}
 
-	public VCRUDHardware(VComprar ventanaPadre, boolean modal, ControladorDatos datos2, Usuario usuario) {
+	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		cargarVentana();
-
 		btnComprar.setEnabled(false);
 		btnModificar.setEnabled(false);
 		lblNewLabel_3.setEnabled(false);
@@ -161,10 +161,11 @@ public class VCRUDHardware extends JDialog {
 		btnComprar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (Integer.parseInt(textStock.getText()) == 0) {
-					JOptionPane.showMessageDialog(null, "ERROR NO HAY STOCK DISPONIBLE", "OWO",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "ERROR NO HAY STOCK DISPONIBLE", "OWO",JOptionPane.ERROR_MESSAGE);
 				} else
-					comprar(dni);
+					comprar();
+					JOptionPane.showMessageDialog(null, "Compra realizada con exito.");
+					cerrarVentana();
 			}
 		});
 		btnComprar.setBounds(13, 451, 160, 38);
@@ -174,7 +175,7 @@ public class VCRUDHardware extends JDialog {
 		btnModificar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				modificar(datos);
+				modificar();
 			}
 		});
 		btnModificar.setBounds(424, 451, 160, 38);
@@ -228,6 +229,11 @@ public class VCRUDHardware extends JDialog {
 		}
 	}
 
+	protected void cerrarVentana() {
+		this.dispose();
+		
+	}
+
 	private void aniadirHardware() {
 
 		Hardware hardw = AniadirPantallaHardw();
@@ -265,7 +271,7 @@ public class VCRUDHardware extends JDialog {
 		
 	}
 
-	private void modificar(ControladorDatos datos2) {
+	private void modificar() {
 
 		Hardware hw = ModiPantallaHardw();
 		datos.modificarHardware(hw);
@@ -284,16 +290,16 @@ public class VCRUDHardware extends JDialog {
 		return hardw;
 	}
 
-	private void comprar(String dni) {
+	private void comprar() {
 
 		LocalDate fecha;
 		Factura fak = new Factura();
 
 		fak.setNombre(textNombre.getText());
 		fak.setCantidad(Integer.valueOf(textCantidad.getText()));
-		fak.setDni(dni);
+		fak.setDni(usu.getDni());
 		fak.setFechaFactura(LocalDate.now());
-		datos.comprarHardware(fak, dni);
+		datos.comprarHardware(fak, usu.getDni());
 
 	}
 

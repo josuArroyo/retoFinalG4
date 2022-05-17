@@ -14,8 +14,5 @@ public class Main {
 		
 		VLogin principal = new VLogin();
 		principal.setVisible(true);
-		
-		
 	}
-
 }

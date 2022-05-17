@@ -3,7 +3,7 @@ package clases;
 public class TorneoNoOficial extends Torneo{
 
 	//Atributos
-	private String reglas;
+	private String regla;
 
 	
 	
@@ -13,21 +13,21 @@ public class TorneoNoOficial extends Torneo{
 		super();
 	}
 	
-	public TorneoNoOficial(String reglas) {
+	public TorneoNoOficial(String regla) {
 		super();
-		this.reglas = reglas;
+		this.regla = regla;
 	}
 
 	
 	
 	//Setters && Getters
 	
-	public String getReglas() {
-		return reglas;
+	public String getRegla() {
+		return regla;
 	}
 
-	public void setReglas(String reglas) {
-		this.reglas = reglas;
+	public void setRegla(String regla) {
+		this.regla = regla;
 	}
 	
 }

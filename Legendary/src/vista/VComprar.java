@@ -122,7 +122,7 @@ public class VComprar extends JDialog {
 
 
 	protected void cargarVCRUD(Usuario usuario) {
-		VCRUDHardware vcru = new VCRUDHardware(this, true,datos,usuario);
+		VCRUDHardware vcru = new VCRUDHardware(this, true,usuario);
 		vcru.setVisible(true);
 		
 	}
@@ -164,7 +164,7 @@ public class VComprar extends JDialog {
 				hardw = hardware;
 			}
 		}
-		VCRUDHardware crudhard = new VCRUDHardware(this, true, datos, hardw, usuario);
+		VCRUDHardware crudhard = new VCRUDHardware(this, true,hardw, usuario);
 		crudhard.setVisible(true);
 
 	}

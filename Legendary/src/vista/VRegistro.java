@@ -1,8 +1,9 @@
-package vista;
+ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -21,8 +22,10 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 
 public class VRegistro extends JDialog {
@@ -71,7 +74,14 @@ public class VRegistro extends JDialog {
 			textContraReg.setText(String.valueOf(cargando.getContrasenia()));
 			textTelReg.setText(String.valueOf(cargando.getTelefono()));
 			textCorreoReg.setText(String.valueOf(cargando.getCorreo()));
-			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));
+			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));	
+			Enumeration<AbstractButton> radios = grupo1.getElements();
+			while(radios.hasMoreElements()) {
+				JRadioButton radio = (JRadioButton) radios.nextElement();
+				if(radio.getText().equalsIgnoreCase(cargando.getSexo())) {
+					radio.setSelected(true);
+				}
+			}
 			
 		}
 	}
@@ -188,6 +198,8 @@ public class VRegistro extends JDialog {
 		grupo1.add(rdbtnHombre);
 		grupo1.add(rdbtnOtro);
 
+		
+		
 		btnAlta = new JButton("Alta");
 		btnAlta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -231,7 +243,7 @@ public class VRegistro extends JDialog {
 	protected void modificarDatos(Usuario usuario) {
 				
 		Usuario usu = ModiPantallaUsu();
-		datos.modificarUsuario(usuario);
+		datos.modificarUsuario(usu);
 		JOptionPane.showMessageDialog(this, "Usuario modificado con éxito");
 		
 	}
@@ -243,6 +255,11 @@ public class VRegistro extends JDialog {
 		usu.setDni(textDniReg.getText());
 		usu.setContrasenia(textContraReg.getText());
 		usu.setNombre(textNombreReg.getText());
+		usu.setTelefono(Integer.valueOf(textTelReg.getText()));
+		usu.setCorreo(textCorreoReg.getText());
+		DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		usu.setFechaNac(LocalDate.parse(textFechNacReg.getText(),formateador));
+		usu.setSexo(grupo1.getSelection().getActionCommand());
 
 		return usu;
 		

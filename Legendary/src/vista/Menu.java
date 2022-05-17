@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Usuario;
 import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
@@ -19,7 +20,7 @@ import java.awt.event.ActionEvent;
 public class Menu extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private ControladorDatos datos = new BDAImplementacion();
+	
 
 	/**
 	 * Launch the application.
@@ -35,7 +36,7 @@ public class Menu extends JDialog {
 
 
 	private JButton btnComprar;
-	public Menu(JFrame ventanaPadre, boolean modal, ControladorDatos datos,String dni) {
+	public Menu(JFrame ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		
@@ -49,7 +50,7 @@ public class Menu extends JDialog {
 			btnComprar = new JButton("Comprar");
 			btnComprar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					comprar(datos);
+					comprar(usuario);
 
 				}
 			});
@@ -63,7 +64,7 @@ public class Menu extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 
 
-					cargarTorneo(dni);
+					cargarTorneo(usuario);
           
 				}
 			});
@@ -75,7 +76,7 @@ public class Menu extends JDialog {
 			JButton btnDatos = new JButton("Datos");
 			btnDatos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cargarDatos();
+					cargarDatos(usuario);
 				}
 			});
 			btnDatos.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -86,7 +87,11 @@ public class Menu extends JDialog {
 			JButton btnReservar = new JButton("Reservar");
 			btnReservar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 					cargarReserva(dni);
+=======
+					cargarReserva(usuario);
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
 				}
 			});
 			btnReservar.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -94,12 +99,13 @@ public class Menu extends JDialog {
 			contentPanel.add(btnReservar);
 		}
 	}
-	protected void comprar(ControladorDatos datos) {
-		VComprar comprar = new VComprar(this, true, datos);
+	protected void comprar(Usuario usuario) {
+		VComprar comprar = new VComprar(this, true , usuario);
 		comprar.setVisible(true);
 		
 	}
 
+<<<<<<< HEAD
 	protected void cargarDatos() {
 		VGestionDatos ventanaDatos = new VGestionDatos(this,true);
 		ventanaDatos.setVisible(true);
@@ -108,12 +114,28 @@ public class Menu extends JDialog {
 
 	protected void cargarReserva(String dni) {
 		VReserva ventanaReserva = new VReserva(this,true,datos, dni);
+=======
+	protected void cargarDatos(Usuario usuario) {
+		if(usuario.isEsAdmin()) {
+			VGestionDatos ventanaDatos = new VGestionDatos(this,true,usuario);
+			ventanaDatos.setVisible(true);
+		}else {
+			VRegistro ventanaDatos = new VRegistro(this,true,usuario);
+			ventanaDatos.setVisible(true);
+		}
+		
+		
+	}
+
+	protected void cargarReserva(Usuario usuario) {
+		VReserva ventanaReserva = new VReserva(this,true,usuario);
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
 		ventanaReserva.setVisible(true);
 		
 	}
 
-	protected void cargarTorneo(String dni) {
-		VTorneo ventanaTorneo = new VTorneo(this,true, datos,dni);
+	protected void cargarTorneo(Usuario usuario) {
+		VTorneo ventanaTorneo = new VTorneo(this,true,usuario);
 		ventanaTorneo.setVisible(true);
 		
 	}

@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import clases.Hardware;
+import clases.Usuario;
 import modelo.BDAImplementacion;
 
 import modelo.ControladorDatos;
@@ -32,55 +33,53 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 
-
 public class VComprar extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JComboBox comboBox;
 	private DefaultTableModel dtm;
-	private JScrollPane scroll;
+	private JScrollPane scroll = new JScrollPane();
 	ArrayList<Hardware> datosHardware;
-	private JTable table;
-
+	private JTable table = null;
+	//private String dni;
 	private String prueba;
-	ControladorDatos datos = new BDAImplementacion();
+	ControladorDatos datos = null;
 	DefaultTableModel model;
-
-
+	private JButton btnAniadir;
+	private JButton btnNewButton;
+	private JButton btnVer;
 	/**
 	 * Launch the application.
 	 */
-//miau
+
 
 	/**
 	 * Create the dialog.
 	 * 
 	 * @param modal
 	 * @param ventanaPadre
+	 * @param datos2
+	 * @param usuario
 	 */
-	public VComprar(JDialog ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VComprar(JDialog ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
-
+		
+		
 		setBounds(100, 100, 672, 520);
-
 
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-
 		comboBox = new JComboBox();
-
-		cargarTipoHardware(datos);
-
+		cargarTipoHardware();
 		comboBox.setBounds(60, 22, 326, 46);
-
 		contentPanel.add(comboBox);
+		comboBox.setSelectedIndex(-1);
 
-
-		JButton btnNewButton = new JButton("VOLVER");
+		btnNewButton = new JButton("VOLVER");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				volver();
@@ -90,34 +89,84 @@ public class VComprar extends JDialog {
 		btnNewButton.setBounds(50, 408, 161, 46);
 		contentPanel.add(btnNewButton);
 
-
-		JButton btnVer = new JButton("Ver");
+		btnVer = new JButton("Ver");
 		btnVer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				presentarTabla();
+				presentarTabla(usuario);
 			}
 		});
 		btnVer.setBounds(453, 34, 89, 23);
 		contentPanel.add(btnVer);
+		
+		btnAniadir = new JButton("A\u00D1ADIR");
+		if (usuario.isEsAdmin()) {
+		btnAniadir.setEnabled(true);
+		}else 
+			btnAniadir.setEnabled(false);
+
+		btnAniadir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+					cargarVCRUD(usuario);
+				
+				
+			}
+		});
+		btnAniadir.setFont(new Font("Algerian", Font.PLAIN, 20));
+		btnAniadir.setBounds(438, 408, 161, 46);
+		contentPanel.add(btnAniadir);
 
 	}
+
+	
+
+
+	protected void cargarVCRUD(Usuario usuario) {
+		VCRUDHardware vcru = new VCRUDHardware(this, true,usuario);
+		vcru.setVisible(true);
+		
+	}
+
+
 
 	protected void volver() {
-		
+
 		this.dispose();
-		
+
 	}
 
-	protected void presentarTabla() {
+	protected void presentarTabla(Usuario usuario) {
 		//
-		JScrollPane scroll = new JScrollPane();
-		scroll = new JScrollPane();
 		// table = new JTable();
 		table = this.cargarTabla();
 		scroll.setViewportView(table);
 
 		contentPanel.add(scroll);
-		scroll.setBounds(24, 191, 412, 70);
+		scroll.setBounds(50, 171, 544, 186);
+
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				seleccionHardware(usuario);
+			}
+		});
+
+	}
+
+	protected void seleccionHardware(Usuario usuario) {
+		int row = table.getSelectedRow();
+		String texto = (String) table.getValueAt(row, 0);
+		int idHw = Integer.parseInt(texto);
+
+		Hardware hardw = new Hardware();
+		for (Hardware hardware : datosHardware) {
+			if (hardware.getIdHW() == idHw) {
+				hardw = hardware;
+			}
+		}
+		VCRUDHardware crudhard = new VCRUDHardware(this, true,hardw, usuario);
+		crudhard.setVisible(true);
+
 	}
 
 	private JTable cargarTabla() {
@@ -125,7 +174,6 @@ public class VComprar extends JDialog {
 		// Columnas
 		String[] columnNames = { "id_hardware", "nombre", "precio", "marca", "tipo", "stock", "precio_coste" };
 		String[] columna = new String[7];
-		model = null;
 		model = new DefaultTableModel(null, columnNames);
 		model.setRowCount(0);
 
@@ -144,17 +192,13 @@ public class VComprar extends JDialog {
 			model.addRow(columna);
 		}
 
-//		for (int i = 0; i < columna.length; i++) {
-//			String string = columna[i];
-//			System.out.println(string);
-//		}
-
 		return new JTable(model);
 
 	}
 
-	private void cargarTipoHardware(ControladorDatos datos) {
+	private void cargarTipoHardware() {
 		ArrayList<Hardware> cargaremos;
+		datos = new BDAImplementacion();
 
 		cargaremos = datos.listarTipoHardware();
 		for (Hardware cargando : cargaremos) {
@@ -162,8 +206,6 @@ public class VComprar extends JDialog {
 			comboBox.addItem(cargando.getTipoHW());
 
 		}
-
-		comboBox.setSelectedIndex(-1);
 
 	}
 }

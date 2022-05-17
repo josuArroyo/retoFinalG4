@@ -1,5 +1,6 @@
 package modelo;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -8,8 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TreeMap;
-
+import Excepciones.ExceptionManager;
 import clases.*;
 
 public class BDAImplementacion implements ControladorDatos {
@@ -18,10 +20,21 @@ public class BDAImplementacion implements ControladorDatos {
 	private Connection con;
 	private PreparedStatement stmt;
 
+	// Los siguientes atributos se utilizan para recoger los valores del fich de
+	// configuración
+	private ResourceBundle configFile;
+	private String driverBD;
+	private String urlBD;
+	private String userBD;
+	private String passwordBD;
+
 	// Sentencias SQL
+
+	// Usuarios
 
 	final String ObtenerUsu = "select * from usuario where dni=? and contrasenia=?";
 	final String ObtenerDniUsu = "select * from usuario";
+<<<<<<< HEAD
 	final String ObtenerIdPlaza = "select p.id_plaza from plaza p, reserva r where p.id_plaza not in(select id_plaza from reserva) limit 1";
 	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
 	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
@@ -33,19 +46,50 @@ public class BDAImplementacion implements ControladorDatos {
 	final String ObtenerUsuario = "Select distinct nombre, dni from Usuario group by nombre";
 	final String ReservarPlaza = "CALL `ReservarPlaza`(?, ?, ?, ?)";
 	
+=======
+	final String ObtenerUsuario = "Select distinct nombre, dni from Usuario group by nombre";
+	final String EliminarUsuario = "delete from usuario where dni = ?";
+	final String AltaUsuario = "CALL `AltaUsuario`(?, ?, ?, ?, ?, ?, ?, ?)";
+	final String ModificarUsuario = "{CALL `ModificarUsuario`(?,?,?,?,?,?,?,?)}";
+
+	// Hardware
+	final String OBTENERhardw = "Select distinct * from hardware group by tipo";
+	final String ObtenerDatosHardw = "Select * from hardware where tipo = ?";
+	final String updateHardware = "UPDATE hardware SET hardware.precio= ?,hardware.stock = ? WHERE hardware.id_hardware =?";
+	final String altaHardware = "INSERT INTO hardware (id_hardware,nombre,precio,marca,tipo,stock,precio_coste) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	final String ComprarProducto = "{CALL `ComprarProducto`(?,?,?,?)}";
+
+	// Torneo
+	final String ObtenerJuego = "Select distinct * from torneo group by juego";
+	final String ObtenerDatosTorneos = "select * from torneo where juego = ?";
+	final String ObtenerDatosTorneoOficial = "select t.*, tof.* from torneo t, torneo_oficial tof where t.id_torneo = tof.id_torneo and juego = ?";
+	final String ObtenerDatosTorneoNoOficial = "select t.*, tor.* from torneo t, torneo_regla tor where t.id_torneo = tor.id_torneo and juego =? ";
+	final String AltaTorneo = "CALL `AñadirTorneo`(?, ?, ?, ?, ?, ?, ?)";
+	final String Inscribirse = "CALL `Insribir`(?,?)";
+
+	// Reservas
+	final String ObtenerIdPlaza = "select p.id_plaza from plaza p, reserva r where p.id_plaza not in(select id_plaza from reserva) limit 1";
+	final String ReservarPlaza = "CALL `ReservarPlaza`(?, ?, ?, ?)";
+
+	// Para la conexión utilizamos un fichero de configuaración, config que
+	// guardamos en el paquete control:
+	public BDAImplementacion() {
+
+		this.configFile = ResourceBundle.getBundle("modelo.config");
+		this.driverBD = this.configFile.getString("Driver");
+		this.urlBD = this.configFile.getString("Conn");
+		this.userBD = this.configFile.getString("DBUser");
+		this.passwordBD = this.configFile.getString("DBPass");
+	}
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
 
 	// Metodo para conectarse a la base de datos.
 	public void openConnection() {
 		try {
-			// Variables para entablar conexion con la BD.
-			String url = "jdbc:mysql://localhost:3306/legendary?serverTimezone=Europe/Madrid&useSSL=false";
-			String user = "root";
-			String password = "abcd*1234";
-
-			// La siguiente linea sirve para conectar a la BD
-			con = DriverManager.getConnection(url, user, password);
+			con = DriverManager.getConnection(urlBD, userBD, passwordBD);
 		} catch (SQLException e) {
 			System.out.println("Error al intentar abrir la BD");
+
 			e.printStackTrace();
 		}
 	}
@@ -60,6 +104,7 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 	}
 
+	// Usuarios
 	// Metodo para aniadir Usuarios.
 	@Override
 	public void altaUsuario(Usuario usu) {
@@ -87,8 +132,7 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+
 		} finally {
 			try {
 				this.closeConnection();
@@ -102,13 +146,62 @@ public class BDAImplementacion implements ControladorDatos {
 
 	@Override
 	public void modificarUsuario(Usuario usu) {
-		// TODO Auto-generated method stub
+
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(ModificarUsuario);
+
+			stmt.setString(1, usu.getDni());
+			stmt.setString(2, usu.getNombre());
+			stmt.setString(3, usu.getContrasenia());
+			stmt.setString(4, usu.getCorreo());
+			stmt.setDate(5, Date.valueOf(usu.getFechaNac()));
+			stmt.setInt(6, usu.getTelefono());
+			stmt.setString(7, usu.getSexo());
+			stmt.setBoolean(8, usu.isEsAdmin());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
 	@Override
-	public void eliminarUsuario(String dni, String nombre) {
-		// TODO Auto-generated method stub
+	public void eliminarUsuario(String dni) {
+
+		this.openConnection();
+
+		try {
+
+			stmt = con.prepareStatement(EliminarUsuario);
+
+			stmt.setString(1, dni);
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -141,7 +234,13 @@ public class BDAImplementacion implements ControladorDatos {
 
 				// AÃ±adimos los valores de la variable rs a la variable usua
 				usua.setDni(rs.getString("dni"));
+				usua.setNombre(rs.getString("nombre"));
 				usua.setContrasenia(rs.getString("contrasenia"));
+				usua.setCorreo(rs.getString("Correo"));
+				usua.setFechaNac(rs.getDate("fecha_nac").toLocalDate());
+				usua.setTelefono(rs.getInt("telefono"));
+				usua.setSexo(rs.getString("sexo"));
+				usua.setEsAdmin(rs.getBoolean("es_admin"));
 
 			} else {
 				// Instaciamos la variable usua a null
@@ -283,34 +382,93 @@ public class BDAImplementacion implements ControladorDatos {
 		return sus;
 	}
 
+	// HARDWARE
 	@Override
 	public void aniadirHardware(Hardware har) {
-		// TODO Auto-generated method stub
+		// Te quiero atti
 
-	}
+		this.openConnection();
 
-	@Override
-	public Hardware buscarHardware(Hardware har) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			stmt = con.prepareStatement(altaHardware);
+
+			stmt.setInt(1, har.getIdHW());
+			stmt.setString(2, har.getNombreHW());
+			stmt.setFloat(3, har.getPrecioHW());
+			stmt.setString(4, har.getMarcaHW());
+			stmt.setString(5, har.getTipoHW());
+			stmt.setInt(6, har.getStockHW());
+			stmt.setFloat(7, har.getPrecioCosteHW());
+
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			System.out.println("Error en alta SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	@Override
 	public void modificarHardware(Hardware har) {
-		// TODO Auto-generated method stub
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(updateHardware);
+
+			stmt.setFloat(1, har.getPrecioHW());
+			stmt.setInt(2, har.getStockHW());
+			stmt.setInt(3, har.getIdHW());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+			System.out.println("Error en alta SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
 	@Override
-	public void comprarHardware(Hardware har) {
-		// TODO Auto-generated method stub
+	public void comprarHardware(Factura fac, String Dni) {
 
-	}
+		this.openConnection();
 
-	@Override
-	public ArrayList<Hardware> listarHardware() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+
+			stmt = con.prepareCall(ComprarProducto);
+
+			stmt.setString(1, fac.getNombre());
+			stmt.setInt(2, fac.getCantidad());
+			stmt.setString(3, fac.getDni());
+			stmt.setDate(4, Date.valueOf(fac.getFechaFactura()));
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	@Override
@@ -366,6 +524,7 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public void aniadirTorneo(Torneo tor) {
 		// TODO Auto-generated method stub
 
@@ -413,6 +572,8 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
+=======
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
 
 	public ArrayList<Hardware> listarTipoHardware() {
 		ResultSet rs = null;
@@ -460,14 +621,21 @@ public class BDAImplementacion implements ControladorDatos {
 		return tipohw;
 	}
 
+<<<<<<< HEAD
 	public ArrayList<Torneo> listarTipoTorneo() {
 		ResultSet rs = null;
 		Torneo tor;
 		Map<String, Torneo> tipoJuego = new TreeMap<>();
+=======
+	// TORNEO
+	@Override
+	public void aniadirTorneo(Torneo tor) {
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
 
 		this.openConnection();
 
 		try {
+<<<<<<< HEAD
 			stmt = con.prepareStatement(ObtenerJuego);
 
 			rs = stmt.executeQuery();
@@ -477,11 +645,70 @@ public class BDAImplementacion implements ControladorDatos {
 				tor = new Torneo();
 				tor.setJuego(rs.getString(""));
 
+=======
+			stmt = con.prepareCall(AltaTorneo);
+
+			stmt.setInt(1, tor.getIdTorneo());
+			stmt.setString(2, tor.getNombre());
+			stmt.setInt(3, tor.getAforo());
+			stmt.setString(4, tor.getJuego());
+			stmt.setDate(5, Date.valueOf(tor.getFecha()));
+			stmt.setString(6, tor.getTipo());
+			if (tor.getTipo().equalsIgnoreCase("oficial")) {
+				stmt.setString(7, ((TorneoOficial) tor).getPremio());
+			} else {
+				stmt.setString(7, ((TorneoNoOficial) tor).getRegla());
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
 			}
+
+			stmt.executeUpdate();
+		} catch (SQLException e1) {
+			System.out.println("Error en alta SQL");
+			e1.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public ArrayList<Torneo> listarDatosTorneos(String juego) {
+		ArrayList<Torneo> listaTorneos = new ArrayList<>();
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+		Torneo tor = null;
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerDatosTorneoOficial);
+
+			stmt.setString(1, juego);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				tor = new TorneoOficial();
+
+				tor.setIdTorneo(rs.getInt("id_torneo"));
+				tor.setNombre(rs.getString("nombre"));
+				tor.setAforo(rs.getInt("aforo"));
+				tor.setJuego(rs.getString("juego"));
+				tor.setDir(rs.getString("direccion"));
+				tor.setFecha(rs.getDate("fecha").toLocalDate());
+				tor.setTipo(rs.getString("tipo"));
+				((TorneoOficial) tor).setPremio(rs.getString("premio"));
+				listaTorneos.add(tor);
+
+			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+<<<<<<< HEAD
 
 		return null;
 	}
@@ -509,5 +736,192 @@ public class BDAImplementacion implements ControladorDatos {
 		return id_plaza;
 
 	}
+=======
+		try {
+			stmt = con.prepareStatement(ObtenerDatosTorneoNoOficial);
 
+			stmt.setString(1, juego);
+			rs2 = stmt.executeQuery();
+
+			while (rs2.next()) {
+				tor = new TorneoNoOficial();
+
+				tor.setIdTorneo(rs2.getInt("id_torneo"));
+				tor.setNombre(rs2.getString("nombre"));
+				tor.setAforo(rs2.getInt("aforo"));
+				tor.setJuego(rs2.getString("juego"));
+				tor.setDir(rs2.getString("direccion"));
+				tor.setFecha(rs2.getDate("fecha").toLocalDate());
+				tor.setTipo(rs2.getString("tipo"));
+				((TorneoNoOficial) tor).setRegla(rs2.getString("regla"));
+				listaTorneos.add(tor);
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (rs2 != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return listaTorneos;
+	}
+
+	public ArrayList<Torneo> listarJuegoTorneo() {
+		ResultSet rs = null;
+		Torneo tor;
+		ArrayList<Torneo> tipoJuego = new ArrayList<>();
+>>>>>>> 45cbd6c424e1baf33e3b4e1011320ec704041541
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerJuego);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				tor = new Torneo();
+
+				tor.setJuego(rs.getString("juego").toString());
+				tipoJuego.add(tor);
+
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException ex) {
+					System.out.println("Error en el cierre del ResultSet");
+				} catch (Exception ex) {
+					System.out.println("Error consulta props");
+				}
+			}
+
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return tipoJuego;
+
+	}
+
+	@Override
+	public void inscribirse(Usuario usu, Torneo tor) {
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(Inscribirse);
+
+			stmt.setString(1, usu.getDni());
+			stmt.setInt(2, tor.getIdTorneo());
+
+			stmt.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	// RESERVA
+
+	@Override
+	public void reservarPlaza(Reserva rev) {
+
+		this.openConnection();
+
+		try {
+			// Usamos la variable de conexion para usar la variable de ejecucion de
+			// sentencias.
+			stmt = con.prepareStatement(ReservarPlaza);
+
+			// recogemos los valores por pantalla para enviarlos a la BD.
+			stmt.setInt(1, rev.getId_Plaza());
+			stmt.setString(2, rev.getDni());
+			stmt.setDate(3, rev.getFecha_ini());
+			stmt.setDate(4, rev.getFecha_fin());
+			// Ejecutamos la sentecia de actualizacion.
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public int traerIDPlaza() {
+		int id_plaza = 0;
+		ResultSet rs = null;
+
+		this.openConnection();
+
+		try {
+			stmt = con.prepareStatement(ObtenerIdPlaza);
+			rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				id_plaza = rs.getInt("id_plaza");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				this.closeConnection();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return id_plaza;
+	}
 }

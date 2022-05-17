@@ -3,23 +3,29 @@ package vista;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import clases.Hardware;
 import clases.Usuario;
 import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 
 public class VRegistro extends JDialog {
@@ -51,30 +57,36 @@ public class VRegistro extends JDialog {
 	 * @param b
 	 * @wbp.parser.constructor
 	 */
-	public VRegistro(VLogin ventanaPadre, boolean modal,ControladorDatos datos2) {
+	public VRegistro(VLogin ventanaPadre, boolean modal,Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(true, datos2);
+		cargarVentana(true,usuario);
 	}
 
-	public VRegistro(VGestionDatos ventanaPadre, boolean modal,  Usuario cargando,ControladorDatos datos2) {
+	public VRegistro(Menu ventanaPadre, boolean modal,  Usuario cargando) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(false, datos);
+		cargarVentana(false, cargando);
 		
 		if (cargando != null){
-			System.out.println(cargando.getNombre());
 			textDniReg.setText(String.valueOf(cargando.getDni()));
 			textNombreReg.setText(String.valueOf(cargando.getNombre()));
 			textContraReg.setText(String.valueOf(cargando.getContrasenia()));
 			textTelReg.setText(String.valueOf(cargando.getTelefono()));
 			textCorreoReg.setText(String.valueOf(cargando.getCorreo()));
-			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));
+			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));	
+			Enumeration<AbstractButton> radios = grupo1.getElements();
+			while(radios.hasMoreElements()) {
+				JRadioButton radio = (JRadioButton) radios.nextElement();
+				if(radio.getText().equalsIgnoreCase(cargando.getSexo())) {
+					radio.setSelected(true);
+				}
+			}
 			
 		}
 	}
 
-	private void cargarVentana(boolean opc,ControladorDatos datos2) {
+	private void cargarVentana(boolean opc,Usuario usu) {
 
 		setBounds(100, 100, 636, 636);
 		getContentPane().setLayout(new BorderLayout());
@@ -186,10 +198,12 @@ public class VRegistro extends JDialog {
 		grupo1.add(rdbtnHombre);
 		grupo1.add(rdbtnOtro);
 
+		
+		
 		btnAlta = new JButton("Alta");
 		btnAlta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				alta(datos);
+				alta();
 
 			}
 		});
@@ -199,6 +213,11 @@ public class VRegistro extends JDialog {
 		contentPanel.add(btnAlta);
 
 		JButton btnModificar = new JButton("MODIFICAR");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modificarDatos(usu);
+			}
+		});
 		btnModificar.setFont(new Font("Algerian", Font.PLAIN, 20));
 		btnModificar.setBounds(204, 528, 158, 46);
 		contentPanel.add(btnModificar);
@@ -221,11 +240,36 @@ public class VRegistro extends JDialog {
 		}
 	}
 
+	protected void modificarDatos(Usuario usuario) {
+				
+		Usuario usu = ModiPantallaUsu();
+		datos.modificarUsuario(usu);
+		JOptionPane.showMessageDialog(this, "Usuario modificado con éxito");
+		
+	}
+
+	private Usuario ModiPantallaUsu() {
+		
+		Usuario usu = new Usuario();
+
+		usu.setDni(textDniReg.getText());
+		usu.setContrasenia(textContraReg.getText());
+		usu.setNombre(textNombreReg.getText());
+		usu.setTelefono(Integer.valueOf(textTelReg.getText()));
+		usu.setCorreo(textCorreoReg.getText());
+		DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		usu.setFechaNac(LocalDate.parse(textFechNacReg.getText(),formateador));
+		usu.setSexo(grupo1.getSelection().getActionCommand());
+
+		return usu;
+		
+	}
+
 	protected void cancelar() {
 		this.dispose();
 	}
 
-	protected void alta(ControladorDatos datos) {
+	protected void alta() {
 
 		Usuario us = new Usuario();
 		LocalDate fecha;
@@ -237,7 +281,7 @@ public class VRegistro extends JDialog {
 
 			if (!found) {
 
-				if (ComprobarDni(textDniReg.getText())) {
+				//if (ComprobarDni(textDniReg.getText())) {
 
 					us.setDni(textDniReg.getText());
 					us.setNombre(textNombreReg.getText());
@@ -248,7 +292,7 @@ public class VRegistro extends JDialog {
 					fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
 					us.setFechaNac(fecha);
 
-				}
+			//	}
 				if (comprobarTelefono(textTelReg.getText())) {
 					us.setTelefono(Integer.parseInt(textTelReg.getText()));
 					us.setSexo(grupo1.getSelection().getActionCommand());
@@ -278,33 +322,33 @@ public class VRegistro extends JDialog {
 
 	}
 
-	private boolean ComprobarDni(String text) {
-		boolean correcto = false;
-		String letras;
-		int numero;
-		char letra[] = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H',
-				'L', 'C', 'K', 'E' };
-
-		if (text.length() == 9) {
-			letras = text.substring(0, 8);
-
-			numero = Integer.valueOf(letras) % 23;
-
-			for (int i = 0; i < text.length(); i++) {
-				if (!Character.isDigit(text.charAt(9))) {
-					if (letra[numero] == text.charAt(9)) {
-						correcto = true;
-					} else {
-						correcto = false;
-					}
-				} else {
-					correcto = false;
-				}
-
-			}
-		}
-		return correcto;
-	}
+//	private boolean ComprobarDni(String text) {
+//		boolean correcto = false;
+//		String letras;
+//		int numero;
+//		char letra[] = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H',
+//				'L', 'C', 'K', 'E' };
+//
+//		if (text.length() == 9) {
+//			letras = text.substring(0, 8);
+//
+//			numero = Integer.valueOf(letras) % 23;
+//
+//			for (int i = 0; i < text.length(); i++) {
+//				if (!Character.isDigit(text.charAt(9))) {
+//					if (letra[numero] == text.charAt(9)) {
+//						correcto = true;
+//					} else {
+//						correcto = false;
+//					}
+//				} else {
+//					correcto = false;
+//				}
+//
+//			}
+//		}
+//		return correcto;
+//	}
 
 	private boolean comprobarTelefono(String text) {
 

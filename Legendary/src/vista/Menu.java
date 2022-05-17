@@ -86,7 +86,7 @@ public class Menu extends JDialog {
 			JButton btnReservar = new JButton("Reservar");
 			btnReservar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					cargarReserva();
+					cargarReserva(dni);
 				}
 			});
 			btnReservar.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -101,13 +101,13 @@ public class Menu extends JDialog {
 	}
 
 	protected void cargarDatos() {
-		VGestionDatos ventanaDatos = new VGestionDatos(this,true,datos);
+		VGestionDatos ventanaDatos = new VGestionDatos(this,true);
 		ventanaDatos.setVisible(true);
 		
 	}
 
-	protected void cargarReserva() {
-		VReserva ventanaReserva = new VReserva(this,true,datos);
+	protected void cargarReserva(String dni) {
+		VReserva ventanaReserva = new VReserva(this,true,datos, dni);
 		ventanaReserva.setVisible(true);
 		
 	}

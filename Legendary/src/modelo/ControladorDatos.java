@@ -59,6 +59,8 @@ public interface ControladorDatos {
 	//Todo Plazas 
 	
 	public void reservarPlaza(Reserva rev);
+
+	public int traerIDPlaza();
 	
 	
 }

@@ -37,7 +37,7 @@ public class VGestionDatos extends JDialog {
 	 * @param b 
 	 * @param menu 
 	 */
-	public VGestionDatos(Menu ventanaPadre, boolean modal, ControladorDatos datos) {
+	public VGestionDatos(Menu ventanaPadre, boolean modal) {
 		
 		super(ventanaPadre);
 		this.setModal(modal);
@@ -60,7 +60,7 @@ public class VGestionDatos extends JDialog {
 			JLabel lblNewLabel = new JLabel("En esta ventana podras borrar usuarios");
 			lblNewLabel.setBounds(33, 50, 414, 24);
 			contentPanel.add(lblNewLabel);
-		}
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 		
 		JButton btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {

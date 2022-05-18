@@ -6,6 +6,9 @@ import java.time.LocalDate;
 
 public class Reserva {
 
+	/**
+	 * Esta clase se utiliza para trabajar con datos de reserva
+	 */
 	//Atributos
 		private int id_Plaza;
 		private String dni;
@@ -15,6 +18,14 @@ public class Reserva {
 		
 		
 		//Constructor
+		/**
+		 * 
+		 * @param id_Plaza
+		 * @param dni
+		 * @param fecha_ini
+		 * @param fecha_fin
+		 * @param coste
+		 */
 		public Reserva(int id_Plaza, String dni, Date fecha_ini, Date fecha_fin, float coste) {
 			super();
 			this.id_Plaza = id_Plaza;

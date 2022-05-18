@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 public class Usuario {
 	
+	/**
+	 * Esta clase se utiliza para trabajar con datos de usuario
+	 */
 	//Atributos
 	
 	private String dni;
@@ -21,6 +24,17 @@ public class Usuario {
 		super();
 	}
 	
+	/**
+	 * 
+	 * @param dni
+	 * @param nombre
+	 * @param contrasenia
+	 * @param correo
+	 * @param fechaNac
+	 * @param esAdmin
+	 * @param telefono
+	 * @param sexo
+	 */
 	public Usuario(String dni, String nombre,String contrasenia,String correo ,LocalDate fechaNac, boolean esAdmin, int telefono, String sexo) {
 		super();
 		this.dni = dni;

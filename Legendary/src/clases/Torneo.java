@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 public class Torneo {
 
+	/**
+	 * Esta clase se utiliza para trabajar con datos de Torneo
+	 */
 	//Atributos
 	
 	private int idTorneo;
@@ -23,6 +26,16 @@ public class Torneo {
 		super();
 	}
 	
+	/**
+	 * 
+	 * @param idTorneo
+	 * @param nombre
+	 * @param aforo
+	 * @param juego
+	 * @param fecha
+	 * @param dir
+	 * @param tipo
+	 */
 	public Torneo(int idTorneo, String nombre, int aforo, String juego, LocalDate fecha, String dir,String tipo) {
 		super();
 		this.idTorneo = idTorneo;

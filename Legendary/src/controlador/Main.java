@@ -6,6 +6,11 @@ import vista.VLogin;
 
 public class Main {
 
+	/**
+	 * Esta clase la usamos para ejecutar el codigo
+	 * 
+	 */
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 

@@ -2,6 +2,10 @@ package clases;
 
 public class Plaza {
 
+	/**
+	 * Esta clase se utiliza para trabajar con datos de Plaza
+	 */
+	
 	//Atributos
 	private int idPlaza;
 	private float PrecioPlaza;

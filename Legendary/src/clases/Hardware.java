@@ -2,8 +2,11 @@ package clases;
 
 public class Hardware {
 
-	//Atributos
+	/**
+	 * Esta clase se us para trabajar con los datos de Hardware
+	 */
 	
+	//Atributo
 	private int idHW;
 	private String nombreHW;
 	private float precioHW;
@@ -18,6 +21,16 @@ public class Hardware {
 		super();
 	}
 	
+	/**
+	 * 
+	 * @param idHW
+	 * @param nombreHW
+	 * @param precioHW
+	 * @param marcaHW
+	 * @param tipoHW
+	 * @param precioCosteHW
+	 * @param stockHW
+	 */
 	public Hardware(int idHW, String nombreHW, float precioHW, String marcaHW, String tipoHW, float precioCosteHW,
 			int stockHW) {
 		super();

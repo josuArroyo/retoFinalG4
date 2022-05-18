@@ -2,6 +2,10 @@ package clases;
 
 public class TorneoNoOficial extends Torneo{
 
+	/**
+	 * Esta clase se utiliza para trabajar con datos de Torneo no Oficial
+	 */
+	
 	//Atributos
 	private String regla;
 
@@ -13,6 +17,10 @@ public class TorneoNoOficial extends Torneo{
 		super();
 	}
 	
+	/**
+	 * 
+	 * @param regla
+	 */
 	public TorneoNoOficial(String regla) {
 		super();
 		this.regla = regla;

@@ -4,7 +4,10 @@ import java.time.LocalDate;
 
 public class Factura {
 
-	//Atributos
+	/**
+	 * Esta clase se utiliza para poder trabajar con los datos de factura
+	 * 
+	 */
 	private int idFactura;
 	private LocalDate fechaFactura;
 	private float precio;
@@ -18,7 +21,15 @@ public class Factura {
 		super();
 		
 	}
-	
+	/**
+	 * 
+	 * @param idFactura
+	 * @param fechaFactura
+	 * @param precio
+	 * @param cantidad
+	 * @param nombre
+	 * @param Dni
+	 */
 	public Factura(int idFactura, LocalDate fechaFactura, float precio, int cantidad,String nombre,String Dni) {
 		super();
 		this.idFactura = idFactura;

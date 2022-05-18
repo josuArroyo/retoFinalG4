@@ -46,10 +46,16 @@ public class VCRUDHardware extends JDialog {
 	private Hardware hardw;
 	private JTextField textPrecioCoste;
 	private JButton btnAniadir;
-	private JLabel lblNewLabel_3;
+	private JLabel lblCantidad;
 	private boolean tiene = false;
 	private Usuario usu;
-
+	private JLabel lblprecioCoste;
+	private JLabel lblId;
+	private JLabel lblNombre;
+	private JLabel lblPrecio;
+	private JLabel lblMarca;
+	private JLabel lblTipo;
+	private JLabel lblStock;
 	/**
 	 * Launch the application.
 	 */
@@ -69,9 +75,34 @@ public class VCRUDHardware extends JDialog {
 		this.hardw = hardw;
 		this.usu = usuario; 
 		cargarVentana();
-		textPrecioCoste.setEnabled(false);
-		btnAniadir.setEnabled(false);
-		btnModificar.setEnabled(false);
+		
+		
+		if (usuario.isEsAdmin()) {
+			
+			
+			lblprecioCoste.setVisible(false);
+			textPrecioCoste.setVisible(false);
+			btnAniadir.setVisible(false);
+			
+			//hacemos que los siguientes campos no sean editables ya sea mientras este comprando o modificando el admin
+			textId.setEnabled(false);
+			textNombre.setEnabled(false);
+			textMarca.setEnabled(false);
+			textTipo.setEnabled(false);
+			
+		}else {
+			
+			btnAniadir.setVisible(false);
+			btnModificar.setVisible(false);
+			textPrecioCoste.setVisible(false);
+			textNombre.setEnabled(false);
+			textId.setEnabled(false);
+			textMarca.setEnabled(false);
+			textPrecio.setEnabled(false);
+			textTipo.setEnabled(false);
+			textStock.setEnabled(false);
+			lblprecioCoste.setVisible(false);
+		}
 	}
 
 	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Usuario usuario) {
@@ -80,9 +111,9 @@ public class VCRUDHardware extends JDialog {
 		cargarVentana();
 		btnComprar.setEnabled(false);
 		btnModificar.setEnabled(false);
-		lblNewLabel_3.setEnabled(false);
+		lblCantidad.setEnabled(false);
 		textCantidad.setEnabled(false);
-
+		
 	}
 
 	private void cargarVentana() {
@@ -95,25 +126,25 @@ public class VCRUDHardware extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("ID");
-		lblNewLabel.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel.setBounds(48, 43, 46, 14);
-		contentPanel.add(lblNewLabel);
+		lblId = new JLabel("ID");
+		lblId.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblId.setBounds(48, 43, 46, 14);
+		contentPanel.add(lblId);
 
 		textId = new JTextField();
 		textId.setBounds(48, 68, 207, 31);
 		contentPanel.add(textId);
 		textId.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("NOMBRE");
-		lblNewLabel_1.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_1.setBounds(338, 43, 86, 14);
-		contentPanel.add(lblNewLabel_1);
+		lblNombre = new JLabel("NOMBRE");
+		lblNombre.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblNombre.setBounds(338, 43, 86, 14);
+		contentPanel.add(lblNombre);
 
-		JLabel lblNewLabel_2 = new JLabel("PRECIO");
-		lblNewLabel_2.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_2.setBounds(48, 126, 86, 14);
-		contentPanel.add(lblNewLabel_2);
+		lblPrecio = new JLabel("PRECIO");
+		lblPrecio.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblPrecio.setBounds(48, 126, 86, 14);
+		contentPanel.add(lblPrecio);
 
 		textNombre = new JTextField();
 		textNombre.setBounds(338, 68, 207, 31);
@@ -125,25 +156,25 @@ public class VCRUDHardware extends JDialog {
 		textPrecio.setBounds(48, 162, 207, 31);
 		contentPanel.add(textPrecio);
 
-		JLabel lblNewLabel_2_1 = new JLabel("MARCA");
-		lblNewLabel_2_1.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_2_1.setBounds(338, 126, 86, 14);
-		contentPanel.add(lblNewLabel_2_1);
+		lblMarca = new JLabel("MARCA");
+		lblMarca.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblMarca.setBounds(338, 126, 86, 14);
+		contentPanel.add(lblMarca);
 
 		textMarca = new JTextField();
 		textMarca.setColumns(10);
 		textMarca.setBounds(338, 162, 207, 31);
 		contentPanel.add(textMarca);
 
-		JLabel lblNewLabel_2_2 = new JLabel("TIPO");
-		lblNewLabel_2_2.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_2_2.setBounds(48, 222, 86, 14);
-		contentPanel.add(lblNewLabel_2_2);
+		lblTipo = new JLabel("TIPO");
+		lblTipo.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblTipo.setBounds(48, 222, 86, 14);
+		contentPanel.add(lblTipo);
 
-		JLabel lblNewLabel_2_2_1 = new JLabel("sTOCK");
-		lblNewLabel_2_2_1.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_2_2_1.setBounds(338, 222, 86, 14);
-		contentPanel.add(lblNewLabel_2_2_1);
+		lblStock = new JLabel("sTOCK");
+		lblStock.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblStock.setBounds(338, 222, 86, 14);
+		contentPanel.add(lblStock);
 
 
 		textTipo = new JTextField();
@@ -168,7 +199,7 @@ public class VCRUDHardware extends JDialog {
 					cerrarVentana();
 			}
 		});
-		btnComprar.setBounds(13, 451, 160, 38);
+		btnComprar.setBounds(408, 451, 160, 38);
 		contentPanel.add(btnComprar);
 
 		btnModificar = new JButton("MODIFICAR");
@@ -178,13 +209,13 @@ public class VCRUDHardware extends JDialog {
 				modificar();
 			}
 		});
-		btnModificar.setBounds(424, 451, 160, 38);
+		btnModificar.setBounds(218, 451, 160, 38);
 		contentPanel.add(btnModificar);
 
-		lblNewLabel_3 = new JLabel("Cantidad");
-		lblNewLabel_3.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_3.setBounds(48, 330, 125, 14);
-		contentPanel.add(lblNewLabel_3);
+		lblCantidad = new JLabel("Cantidad");
+		lblCantidad.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblCantidad.setBounds(48, 330, 125, 14);
+		contentPanel.add(lblCantidad);
 
 		textCantidad = new JTextField();
 		textCantidad.setBounds(48, 363, 207, 31);
@@ -204,13 +235,13 @@ public class VCRUDHardware extends JDialog {
 			}
 		});
 		btnAniadir.setFont(new Font("Algerian", Font.PLAIN, 20));
-		btnAniadir.setBounds(220, 451, 154, 38);
+		btnAniadir.setBounds(36, 451, 154, 38);
 		contentPanel.add(btnAniadir);
 
-		JLabel lblNewLabel_4 = new JLabel("PrecioCoste");
-		lblNewLabel_4.setFont(new Font("Algerian", Font.PLAIN, 20));
-		lblNewLabel_4.setBounds(338, 326, 136, 23);
-		contentPanel.add(lblNewLabel_4);
+		lblprecioCoste = new JLabel("PrecioCoste");
+		lblprecioCoste.setFont(new Font("Algerian", Font.PLAIN, 20));
+		lblprecioCoste.setBounds(338, 326, 136, 23);
+		contentPanel.add(lblprecioCoste);
 
 		textPrecioCoste = new JTextField();
 		textPrecioCoste.setBounds(338, 364, 194, 29);

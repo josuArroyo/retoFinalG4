@@ -43,7 +43,7 @@ public class VRegistro extends JDialog {
 	private JRadioButton rdbtnOtro;
 	private ButtonGroup grupo1;
 	private ControladorDatos datos = new BDAImplementacion();
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -57,36 +57,40 @@ public class VRegistro extends JDialog {
 	 * @param b
 	 * @wbp.parser.constructor
 	 */
-	public VRegistro(VLogin ventanaPadre, boolean modal,Usuario usuario) {
+	public VRegistro(VLogin ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		cargarVentana(true,usuario);
+		cargarVentana(true, usuario);
 	}
 
-	public VRegistro(Menu ventanaPadre, boolean modal,  Usuario cargando) {
+	public VRegistro(Menu ventanaPadre, boolean modal, Usuario cargando) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		cargarVentana(false, cargando);
+
+		textDniReg.setEnabled(false);
+		textFechNacReg.setEnabled(false);
 		
-		if (cargando != null){
+		
+		if (cargando != null) {
 			textDniReg.setText(String.valueOf(cargando.getDni()));
 			textNombreReg.setText(String.valueOf(cargando.getNombre()));
 			textContraReg.setText(String.valueOf(cargando.getContrasenia()));
 			textTelReg.setText(String.valueOf(cargando.getTelefono()));
 			textCorreoReg.setText(String.valueOf(cargando.getCorreo()));
-			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));	
+			textFechNacReg.setText(String.valueOf(cargando.getFechaNac()));
 			Enumeration<AbstractButton> radios = grupo1.getElements();
-			while(radios.hasMoreElements()) {
+			while (radios.hasMoreElements()) {
 				JRadioButton radio = (JRadioButton) radios.nextElement();
-				if(radio.getText().equalsIgnoreCase(cargando.getSexo())) {
+				if (radio.getText().equalsIgnoreCase(cargando.getSexo())) {
 					radio.setSelected(true);
 				}
 			}
-			
+
 		}
 	}
 
-	private void cargarVentana(boolean opc,Usuario usu) {
+	private void cargarVentana(boolean opc, Usuario usu) {
 
 		setBounds(100, 100, 636, 636);
 		getContentPane().setLayout(new BorderLayout());
@@ -198,8 +202,6 @@ public class VRegistro extends JDialog {
 		grupo1.add(rdbtnHombre);
 		grupo1.add(rdbtnOtro);
 
-		
-		
 		btnAlta = new JButton("Alta");
 		btnAlta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -234,22 +236,22 @@ public class VRegistro extends JDialog {
 
 		if (opc) {
 			btnModificar.setVisible(false);
-		} else if(!opc) {
+		} else if (!opc) {
 			btnAlta.setVisible(false);
 
 		}
 	}
 
 	protected void modificarDatos(Usuario usuario) {
-				
+
 		Usuario usu = ModiPantallaUsu();
 		datos.modificarUsuario(usu);
 		JOptionPane.showMessageDialog(this, "Usuario modificado con éxito");
-		
+
 	}
 
 	private Usuario ModiPantallaUsu() {
-		
+
 		Usuario usu = new Usuario();
 
 		usu.setDni(textDniReg.getText());
@@ -258,11 +260,11 @@ public class VRegistro extends JDialog {
 		usu.setTelefono(Integer.valueOf(textTelReg.getText()));
 		usu.setCorreo(textCorreoReg.getText());
 		DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		usu.setFechaNac(LocalDate.parse(textFechNacReg.getText(),formateador));
+		usu.setFechaNac(LocalDate.parse(textFechNacReg.getText(), formateador));
 		usu.setSexo(grupo1.getSelection().getActionCommand());
 
 		return usu;
-		
+
 	}
 
 	protected void cancelar() {
@@ -281,18 +283,18 @@ public class VRegistro extends JDialog {
 
 			if (!found) {
 
-				//if (ComprobarDni(textDniReg.getText())) {
+				// if (ComprobarDni(textDniReg.getText())) {
 
-					us.setDni(textDniReg.getText());
-					us.setNombre(textNombreReg.getText());
-					us.setContrasenia(textContraReg.getText());
-					us.setCorreo(textCorreoReg.getText());
+				us.setDni(textDniReg.getText());
+				us.setNombre(textNombreReg.getText());
+				us.setContrasenia(textContraReg.getText());
+				us.setCorreo(textCorreoReg.getText());
 
-					DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-					fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
-					us.setFechaNac(fecha);
+				DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
+				us.setFechaNac(fecha);
 
-			//	}
+				// }
 				if (comprobarTelefono(textTelReg.getText())) {
 					us.setTelefono(Integer.parseInt(textTelReg.getText()));
 					us.setSexo(grupo1.getSelection().getActionCommand());
@@ -307,13 +309,16 @@ public class VRegistro extends JDialog {
 
 					correcto = true;
 				} else {
-					VErrorDatosIncorrectos ventana = new VErrorDatosIncorrectos();
-					ventana.setVisible(true);
+
+					JOptionPane.showMessageDialog(null, "Introduzca el tipo de datos correctos en el campo.",
+							"Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+
 				}
 
 			} else {
-				VErrorUsuExist ventana = new VErrorUsuExist();
-				ventana.setVisible(true);
+				JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese DNI.", "Datos incorrectos",
+						JOptionPane.ERROR_MESSAGE);
+
 			}
 
 		} catch (Exception e) {
@@ -368,7 +373,5 @@ public class VRegistro extends JDialog {
 		}
 		return correcto;
 	}
-	
-	
-	
+
 }

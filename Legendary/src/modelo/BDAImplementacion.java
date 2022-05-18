@@ -118,7 +118,7 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e1) {
-
+			e1.printStackTrace();
 		} finally {
 			try {
 				this.closeConnection();

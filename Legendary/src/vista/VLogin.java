@@ -14,6 +14,8 @@ import modelo.BDAImplementacion;
 import modelo.ControladorDatos;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -116,8 +118,8 @@ public class VLogin extends JFrame {
 			password.setText("");
 			
 		}else {
-			VErrorLogin ventana =  new VErrorLogin();
-			ventana.setVisible(true);
+
+			JOptionPane.showMessageDialog(null, "Usuario o Contraseña incorrectas.","Datos incorrectos", JOptionPane.ERROR_MESSAGE);
 			textDni.setText("");
 			password.setText("");	
 		}

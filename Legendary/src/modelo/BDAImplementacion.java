@@ -93,7 +93,7 @@ public class BDAImplementacion implements ControladorDatos {
 	// Usuarios
 	// Metodo para aniadir Usuarios.
 	@Override
-	public void altaUsuario(Usuario usu) {
+	public void altaUsuario(Usuario usu) throws ExceptionManager {
 		// TODO Auto-generated method stub
 
 		// Abrimos la conexion con la BD.
@@ -118,20 +118,24 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			String error = "Error al dar de alta";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al dar de alta";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 	}
 
 	@Override
-	public void modificarUsuario(Usuario usu) {
+	public void modificarUsuario(Usuario usu) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -151,21 +155,23 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al modificar el usuario";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al modificar el usuario";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 	}
 
 	@Override
-	public void eliminarUsuario(String dni) {
+	public void eliminarUsuario(String dni) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -179,20 +185,24 @@ public class BDAImplementacion implements ControladorDatos {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al eliminar el usuario";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al eliminar el usuario";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 	}
 
 	@Override
-	public Usuario buscarUsuario(String dni, String contrasenia) {
+	public Usuario buscarUsuario(String dni, String contrasenia) throws ExceptionManager {
 
 		// Variables
 		ResultSet rs = null;
@@ -234,22 +244,25 @@ public class BDAImplementacion implements ControladorDatos {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error en login");
+			String error = "Error al buscar el usuario";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					String error = "Error al buscar el usuario";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al buscar el usuario";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
@@ -257,7 +270,7 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public boolean buscarUsuarioDni(String dni) {
+	public boolean buscarUsuarioDni(String dni) throws ExceptionManager {
 		// Variables
 		ResultSet rs = null;
 		Usuario usua = null;
@@ -291,22 +304,25 @@ public class BDAImplementacion implements ControladorDatos {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Error en login");
+			String error = "Error al buscar el usuario";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					String error = "Error al buscar el usuario";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al buscar el usuario";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
@@ -314,7 +330,7 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public ArrayList<Usuario> listarUsuarios() {
+	public ArrayList<Usuario> listarUsuarios() throws ExceptionManager {
 		ResultSet rs = null;
 		Usuario usu;
 		ArrayList<Usuario> sus = new ArrayList<>();
@@ -350,17 +366,22 @@ public class BDAImplementacion implements ControladorDatos {
 				try {
 					rs.close();
 				} catch (SQLException ex) {
-					System.out.println("Error en el cierre del ResultSet");
+					String error = "Error al buscar el usuario";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				} catch (Exception ex) {
-					System.out.println("Error consulta props");
+					String error = "Error al buscar el usuario";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al buscar el usuario";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 
 		}
@@ -370,7 +391,7 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// HARDWARE
 	@Override
-	public void aniadirHardware(Hardware har) {
+	public void aniadirHardware(Hardware har) throws ExceptionManager {
 		// Te quiero atti
 
 		this.openConnection();
@@ -388,20 +409,23 @@ public class BDAImplementacion implements ControladorDatos {
 
 			stmt.executeUpdate();
 		} catch (SQLException e1) {
-			System.out.println("Error en alta SQL");
-			e1.printStackTrace();
+			String error = "Error al añadir hardware";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				String error = "Error al añadir hardware";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 	}
 
 	@Override
-	public void modificarHardware(Hardware har) {
+	public void modificarHardware(Hardware har) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -415,20 +439,23 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e1) {
-			System.out.println("Error en alta SQL");
-			e1.printStackTrace();
+			String error = "Error al añadir hardware";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				String error = "Error al añadir hardware";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 	}
 
 	@Override
-	public void comprarHardware(Factura fac, String Dni) {
+	public void comprarHardware(Factura fac, String Dni) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -444,21 +471,24 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			String error = "Error al añadir hardware";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al añadir hardware";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 	}
 
 	@Override
-	public ArrayList<Hardware> listarDatosHardware(String tipo) {
+	public ArrayList<Hardware> listarDatosHardware(String tipo) throws ExceptionManager {
 
 		// Variables
 		ArrayList<Hardware> datosHardware = new ArrayList<>();
@@ -488,20 +518,25 @@ public class BDAImplementacion implements ControladorDatos {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al añadir hardware";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String error = "Error al añadir hardware";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				String error = "Error al añadir hardware";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
@@ -511,7 +546,7 @@ public class BDAImplementacion implements ControladorDatos {
 
 	@Override
 
-	public ArrayList<Hardware> listarTipoHardware() {
+	public ArrayList<Hardware> listarTipoHardware() throws ExceptionManager {
 		ResultSet rs = null;
 		Hardware hardw;
 		ArrayList<Hardware> tipohw = new ArrayList<>();
@@ -549,7 +584,9 @@ public class BDAImplementacion implements ControladorDatos {
 				this.closeConnection();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al añadir hardware";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 
 		}
@@ -559,7 +596,7 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// TORNEO
 	@Override
-	public void aniadirTorneo(Torneo tor) {
+	public void aniadirTorneo(Torneo tor) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -580,19 +617,22 @@ public class BDAImplementacion implements ControladorDatos {
 
 			stmt.executeUpdate();
 		} catch (SQLException e1) {
-			System.out.println("Error en alta SQL");
-			e1.printStackTrace();
+			String error = "Error al añadir torneo";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				String error = "Error al añadir torneo";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 	}
 
 	@Override
-	public ArrayList<Torneo> listarDatosTorneos(String juego) {
+	public ArrayList<Torneo> listarDatosTorneos(String juego) throws ExceptionManager {
 		ArrayList<Torneo> listaTorneos = new ArrayList<>();
 		ResultSet rs = null;
 		ResultSet rs2 = null;
@@ -622,8 +662,9 @@ public class BDAImplementacion implements ControladorDatos {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al listar torneo";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		}
 		try {
 			stmt = con.prepareStatement(ObtenerDatosTorneoNoOficial);
@@ -654,27 +695,33 @@ public class BDAImplementacion implements ControladorDatos {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String error = "Error al listar torneo";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 			if (rs2 != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					e.printStackTrace();
+					String error = "Error al listar torneo";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				String error = "Error al listar torneo";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
 		return listaTorneos;
 	}
 
-	public ArrayList<Torneo> listarJuegoTorneo() {
+	public ArrayList<Torneo> listarJuegoTorneo() throws ExceptionManager {
 		ResultSet rs = null;
 		Torneo tor;
 		ArrayList<Torneo> tipoJuego = new ArrayList<>();
@@ -695,25 +742,31 @@ public class BDAImplementacion implements ControladorDatos {
 
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al listar torneo";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			// cerramos ResultSet
 			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException ex) {
-					System.out.println("Error en el cierre del ResultSet");
+					String error = "Error al listar tipo torneo";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				} catch (Exception ex) {
-					System.out.println("Error consulta props");
+					String error = "Error al listar tipo torneo";
+					ExceptionManager uwu = new ExceptionManager(error);
+					throw uwu;
 				}
 			}
 
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al listar tipo torneo";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 
 		}
@@ -723,7 +776,7 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	@Override
-	public void inscribirse(Usuario usu, Torneo tor) {
+	public void inscribirse(Usuario usu, Torneo tor) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -736,14 +789,16 @@ public class BDAImplementacion implements ControladorDatos {
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al inscribirse al torneo";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al inscribirse al torneo";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 
@@ -752,7 +807,7 @@ public class BDAImplementacion implements ControladorDatos {
 	// RESERVA
 
 	@Override
-	public void reservarPlaza(Reserva rev) {
+	public void reservarPlaza(Reserva rev) throws ExceptionManager {
 
 		this.openConnection();
 
@@ -769,22 +824,24 @@ public class BDAImplementacion implements ControladorDatos {
 			// Ejecutamos la sentecia de actualizacion.
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al Error al reservar plaza";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al reservar plaza";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 	}
 
 	@Override
-	public int traerIDPlaza() {
-		int id_plaza = 0;
+	public int traerIDPlaza() throws ExceptionManager {
+		int id_plaza = 1;
 		ResultSet rs = null;
 
 		this.openConnection();
@@ -798,14 +855,16 @@ public class BDAImplementacion implements ControladorDatos {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String error = "Error al traer id plaza";
+			ExceptionManager uwu = new ExceptionManager(error);
+			throw uwu;
 		} finally {
 			try {
 				this.closeConnection();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				String error = "Error al traer id plaza";
+				ExceptionManager uwu = new ExceptionManager(error);
+				throw uwu;
 			}
 		}
 

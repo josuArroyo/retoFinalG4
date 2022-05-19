@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Excepciones.ExceptionManager;
 import clases.Usuario;
 
 import modelo.BDAImplementacion;
@@ -108,7 +109,11 @@ public class VLogin extends JFrame {
 		 dni = textDni.getText().toString();
 		 pass = String.valueOf(password.getPassword());
 		
-		usuario = datos.buscarUsuario(dni, pass);
+		try {
+			usuario = datos.buscarUsuario(dni, pass);
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+		}
 		if( usuario != null) {
 			
 			Menu menu = new Menu(this, true, usuario);

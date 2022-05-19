@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Excepciones.ExceptionManager;
 import clases.Torneo;
 import clases.TorneoNoOficial;
 import clases.TorneoOficial;
@@ -164,7 +165,11 @@ public class VAniadirTorneo extends JDialog {
 		// String opcionOficial = rdbtnOficial.getText().toString();
 		// String opcionNoOfficial = rdbtnNoOficial.getText().toString();
 
-		datos.aniadirTorneo(tor);
+		try {
+			datos.aniadirTorneo(tor);
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al añadir torneo", JOptionPane.ERROR_MESSAGE);
+		}
 		JOptionPane.showMessageDialog(this, "Torneo dado de alta");
 
 		textId.setText("");

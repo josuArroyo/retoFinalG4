@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Excepciones.ExceptionManager;
 import clases.Reserva;
 import clases.Usuario;
 import modelo.BDAImplementacion;
@@ -115,7 +116,13 @@ public class VReserva extends JDialog {
 	}
 
 	private void rellenarPlaza() {
-		String id_Plaza = String.valueOf(datos.traerIDPlaza());
+		String id_Plaza = "1";
+		try {
+			id_Plaza = String.valueOf(datos.traerIDPlaza());
+		} catch (ExceptionManager e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		if(id_Plaza.equals(0)) {
 			
@@ -135,7 +142,11 @@ public class VReserva extends JDialog {
 		rev.setDni(usuario.getDni());
 		rev.setFecha_ini(Date.valueOf(textFIni.getText()));
 		rev.setFecha_fin(Date.valueOf(textFFin.getText()));
-		datos.reservarPlaza(rev);
+		try {
+			datos.reservarPlaza(rev);
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al reservar la  plaza", JOptionPane.ERROR_MESSAGE);
+		}
 		textFFin.setText(null);
 		textFIni.setText(null);
 		JOptionPane.showMessageDialog(null, "Reserva completada");

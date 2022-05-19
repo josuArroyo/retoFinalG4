@@ -10,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Excepciones.ExceptionManager;
 import clases.Hardware;
 import clases.Usuario;
 import modelo.BDAImplementacion;
@@ -25,7 +26,9 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 
 public class VRegistro extends JDialog {
@@ -70,8 +73,7 @@ public class VRegistro extends JDialog {
 
 		textDniReg.setEnabled(false);
 		textFechNacReg.setEnabled(false);
-		
-		
+
 		if (cargando != null) {
 			textDniReg.setText(String.valueOf(cargando.getDni()));
 			textNombreReg.setText(String.valueOf(cargando.getNombre()));
@@ -244,9 +246,16 @@ public class VRegistro extends JDialog {
 
 	protected void modificarDatos(Usuario usuario) {
 
-		Usuario usu = ModiPantallaUsu();
-		datos.modificarUsuario(usu);
-		JOptionPane.showMessageDialog(this, "Usuario modificado con éxito");
+		try {
+			Usuario usu = ModiPantallaUsu();
+			if (comprobarTelefono(String.valueOf(usu.getTelefono()))) {
+				datos.modificarUsuario(usu);
+			}
+
+		} catch (ExceptionManager e) {
+
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+		}
 
 	}
 
@@ -275,85 +284,105 @@ public class VRegistro extends JDialog {
 
 		Usuario us = new Usuario();
 		LocalDate fecha;
-		boolean found;
+		boolean found = false;
 		boolean correcto = false;
 
-		found = datos.buscarUsuarioDni(textDniReg.getText());
 		try {
+			found = datos.buscarUsuarioDni(textDniReg.getText());
+		} catch (ExceptionManager e1) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+		}
+		try {
+			if (textDniReg.getText().isEmpty() || textNombreReg.getText().isEmpty() || textContraReg.getText().isEmpty()
+					|| textFechNacReg.getText().isEmpty() || textCorreoReg.getText().isEmpty()
+					|| textTelReg.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Mete los datos en su sitio ");
+			}else {
+				
+			
+				if (!found) {
 
-			if (!found) {
+					if (ComprobarDni(textDniReg.getText())) {
 
-				// if (ComprobarDni(textDniReg.getText())) {
+						us.setDni(textDniReg.getText());
+						us.setNombre(textNombreReg.getText());
+						us.setContrasenia(textContraReg.getText());
+						us.setCorreo(textCorreoReg.getText());
 
-				us.setDni(textDniReg.getText());
-				us.setNombre(textNombreReg.getText());
-				us.setContrasenia(textContraReg.getText());
-				us.setCorreo(textCorreoReg.getText());
+						DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+						fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
+						us.setFechaNac(fecha);
 
-				DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				fecha = LocalDate.parse(textFechNacReg.getText(), formateador);
-				us.setFechaNac(fecha);
+						if (comprobarTelefono(textTelReg.getText())) {
+							us.setTelefono(Integer.parseInt(textTelReg.getText()));
+							us.setSexo(grupo1.getSelection().getActionCommand());
 
-				// }
-				if (comprobarTelefono(textTelReg.getText())) {
-					us.setTelefono(Integer.parseInt(textTelReg.getText()));
-					us.setSexo(grupo1.getSelection().getActionCommand());
+							datos.altaUsuario(us);
 
-					datos.altaUsuario(us);
-					textDniReg.setText("");
-					textNombreReg.setText("");
-					textContraReg.setText("");
-					textCorreoReg.setText("");
-					textFechNacReg.setText("");
-					textTelReg.setText("");
+							textDniReg.setText("");
+							textNombreReg.setText("");
+							textContraReg.setText("");
+							textCorreoReg.setText("");
+							textFechNacReg.setText("");
+							textTelReg.setText("");
 
-					correcto = true;
+							correcto = true;
+
+							JOptionPane.showMessageDialog(null, "Registro realizado con exito.");
+						} else {
+
+							JOptionPane.showMessageDialog(null, "Introduzca el tipo de datos correctos en el campo.",
+									"Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+
+						}
+
+					} else {
+
+						JOptionPane.showMessageDialog(null, "El dni esta mal introduzca el dni correcto ",
+								"Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+
+					}
+
 				} else {
-
-					JOptionPane.showMessageDialog(null, "Introduzca el tipo de datos correctos en el campo.",
-							"Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese DNI.", "Datos incorrectos",
+							JOptionPane.ERROR_MESSAGE);
 
 				}
-
-			} else {
-				JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese DNI.", "Datos incorrectos",
-						JOptionPane.ERROR_MESSAGE);
-
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
 
-//	private boolean ComprobarDni(String text) {
-//		boolean correcto = false;
-//		String letras;
-//		int numero;
-//		char letra[] = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H',
-//				'L', 'C', 'K', 'E' };
-//
-//		if (text.length() == 9) {
-//			letras = text.substring(0, 8);
-//
-//			numero = Integer.valueOf(letras) % 23;
-//
-//			for (int i = 0; i < text.length(); i++) {
-//				if (!Character.isDigit(text.charAt(9))) {
-//					if (letra[numero] == text.charAt(9)) {
-//						correcto = true;
-//					} else {
-//						correcto = false;
-//					}
-//				} else {
-//					correcto = false;
-//				}
-//
-//			}
-//		}
-//		return correcto;
-//	}
+	private boolean ComprobarDni(String text) {
+		boolean correcto = false;
+		String letras;
+		int numero;
+		char letra[] = { 'T', 'R', 'W', 'A', 'G', 'M', 'Y', 'F', 'P', 'D', 'X', 'B', 'N', 'J', 'Z', 'S', 'Q', 'V', 'H',
+				'L', 'C', 'K', 'E' };
+
+		if (text.length() == 9) {
+			letras = text.substring(0, 8);
+
+			numero = Integer.valueOf(letras) % 23;
+
+			for (int i = 0; i < text.length(); i++) {
+				if (!Character.isDigit(text.charAt(8))) {
+					if (letra[numero] == text.charAt(8)) {
+						correcto = true;
+					} else {
+						correcto = false;
+					}
+				} else {
+					correcto = false;
+				}
+
+			}
+		}
+		return correcto;
+	}
 
 	private boolean comprobarTelefono(String text) {
 

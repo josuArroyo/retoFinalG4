@@ -23,6 +23,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
+/**
+ * Esta clase es para gestionar el login
+ * @author 1dam
+ *
+ */
 public class VLogin extends JFrame {
 
 	private JPanel contentPane;
@@ -36,13 +41,9 @@ public class VLogin extends JFrame {
 
 	private ControladorDatos datos = new BDAImplementacion();
 	
+	
 	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the frame.
-	 * @param datos 
+	 * Este es el constructor de la ventana
 	 */
 	public VLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,13 +96,20 @@ public class VLogin extends JFrame {
 	}
 
 
-
+	/**
+	 * Este metodo nos cargara la ventana de Registro
+	 */
 	protected void cargarRegistro() {
 		VRegistro registro= new VRegistro(this,true,usuario);
 		registro.setVisible(true);
 		
 	}
 
+	/**
+	 * Este metodo comprueba que el usuario exista en la base de datos
+	 * @param dni
+	 * @param pass
+	 */
 	protected void comprobar( String dni, String pass) {
 		
 		boolean Registro = false;

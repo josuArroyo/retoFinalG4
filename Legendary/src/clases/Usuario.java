@@ -2,11 +2,16 @@ package clases;
 
 import java.time.LocalDate;
 
-public class Usuario {
-	
 	/**
+	 * 
+	 * @author 1dam
+	 *
 	 * Esta clase se utiliza para trabajar con datos de usuario
 	 */
+
+public class Usuario {
+	
+	
 	//Atributos
 	
 	private String dni;

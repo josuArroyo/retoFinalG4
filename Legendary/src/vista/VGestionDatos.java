@@ -21,6 +21,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta clase sirve para Borrar usuarios
+ * @author 1dam
+ *
+ */
 public class VGestionDatos extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -29,16 +34,10 @@ public class VGestionDatos extends JDialog {
 	private ArrayList<Usuario> cargaremos = new ArrayList<>();
 
 	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the dialog.
-	 * @param usuario 
-	 * 
-	 * @param datos
-	 * @param b
-	 * @param menu
+	 * Este el constructor de la ventana
+	 * @param ventanaPadre
+	 * @param modal
+	 * @param usuario
 	 */
 	public VGestionDatos(Menu ventanaPadre, boolean modal, Usuario usuario) {
 
@@ -65,8 +64,9 @@ public class VGestionDatos extends JDialog {
 		JButton btnBorrar = new JButton("Borrar");
 		btnBorrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				int confirmar = JOptionPane.showConfirmDialog(null,"Estas seguro de que quieres eliminar a este usuario?");
-
+				
 				if (JOptionPane.OK_OPTION == confirmar) {
 					System.out.println(comboBox.getSelectedItem().toString().substring(0,9));
 					datos.eliminarUsuario(comboBox.getSelectedItem().toString().substring(0,9));
@@ -92,13 +92,17 @@ public class VGestionDatos extends JDialog {
 		
 	}
 
-	
+	/**
+	 * El Metodo se usa para cerrar la ventana actual
+	 */
 	protected void cerrarVentana() {
 		this.dispose();
 		
 	}
 
-
+	/**
+	 * Este metodo es para cargar la informacion de los usuarios en una comboBox
+	 */
 	private void cargarUsuarios() {
 		cargaremos = datos.listarUsuarios();
 

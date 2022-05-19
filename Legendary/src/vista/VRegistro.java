@@ -28,6 +28,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta es la clase para registrarse
+ * @author 1dam
+ *
+ */
 public class VRegistro extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -45,17 +50,10 @@ public class VRegistro extends JDialog {
 	private ControladorDatos datos = new BDAImplementacion();
 
 	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the dialog.
-	 * 
-	 * @param vGestionDatos
-	 * 
-	 * @param cargando
-	 * @param b
-	 * @wbp.parser.constructor
+	 * Este es el constructor de la ventana cuando se viene de la ventana login
+	 * @param ventanaPadre
+	 * @param modal
+	 * @param usuario
 	 */
 	public VRegistro(VLogin ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
@@ -63,6 +61,12 @@ public class VRegistro extends JDialog {
 		cargarVentana(true, usuario);
 	}
 
+	/**
+	 * Este es el constructor de la ventana cuando se viene de la ventana Menu
+	 * @param ventanaPadre
+	 * @param modal
+	 * @param cargando
+	 */
 	public VRegistro(Menu ventanaPadre, boolean modal, Usuario cargando) {
 		super(ventanaPadre);
 		this.setModal(modal);
@@ -90,6 +94,11 @@ public class VRegistro extends JDialog {
 		}
 	}
 
+	/**
+	 * Este metodo sirve para mostrar la ventana
+	 * @param opc
+	 * @param usu
+	 */
 	private void cargarVentana(boolean opc, Usuario usu) {
 
 		setBounds(100, 100, 636, 636);
@@ -242,6 +251,10 @@ public class VRegistro extends JDialog {
 		}
 	}
 
+	/**
+	 * El metodo se usa para modicar los datos de los usuarios
+	 * @param usuario
+	 */
 	protected void modificarDatos(Usuario usuario) {
 
 		Usuario usu = ModiPantallaUsu();
@@ -250,6 +263,10 @@ public class VRegistro extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo nos devuelve el objeto usuario con los nuevos datos para modificar
+	 * @return Usuario
+	 */
 	private Usuario ModiPantallaUsu() {
 
 		Usuario usu = new Usuario();
@@ -267,10 +284,16 @@ public class VRegistro extends JDialog {
 
 	}
 
+	/**
+	 * El metodo sirve para cerrar la ventana actual
+	 */
 	protected void cancelar() {
 		this.dispose();
 	}
-
+	
+	/**
+	 * El metodo se usa para dar de alta a un usuario
+	 */
 	protected void alta() {
 
 		Usuario us = new Usuario();
@@ -354,7 +377,12 @@ public class VRegistro extends JDialog {
 //		}
 //		return correcto;
 //	}
-
+	
+	/**
+	 * El metodo sirve para comprobar que el Telefono sea de 9 digitos
+	 * @param text
+	 * @return
+	 */
 	private boolean comprobarTelefono(String text) {
 
 		boolean correcto = false;

@@ -30,6 +30,11 @@ import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 
+/**
+ * Esta clase es para añadir torneos
+ * @author 1dam
+ *
+ */
 public class VAniadirTorneo extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -46,11 +51,9 @@ public class VAniadirTorneo extends JDialog {
 	private JTextField textPremio;
 
 	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the dialog.
+	 * Este es el constructor de la ventana
+	 * @param ventanaPadre
+	 * @param modal
 	 */
 	public VAniadirTorneo(VTorneo ventanaPadre, boolean modal) {
 		super(ventanaPadre);
@@ -156,6 +159,9 @@ public class VAniadirTorneo extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo sirve para añadir un torneo a la base de datos
+	 */
 	protected void crearTorneo() {
 
 		Torneo tor = AniadirPantallaTorneo();
@@ -177,6 +183,10 @@ public class VAniadirTorneo extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo sirve para recoger los datos de los campos y añadirlos a un objeto que lo enviamos a el metodo crear torneo
+	 * @return Torneo
+	 */
 	private Torneo AniadirPantallaTorneo() {
 		
 		Torneo tor = new Torneo();

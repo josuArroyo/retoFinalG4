@@ -23,6 +23,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta clase sirve para gestionar las reservas
+ * @author 1dam
+ *
+ */
 public class VReserva extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -31,15 +36,12 @@ public class VReserva extends JDialog {
 	private JTextField textNumPlaza;
 	private ControladorDatos datos = new BDAImplementacion();
 
+	
 	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the dialog.
-	 * @param modal 
-	 * @param ventanaPadre 
-	 * @param usuario 
+	 * Este es constructor de la ventana
+	 * @param ventanaPadre
+	 * @param modal
+	 * @param usuario
 	 */
 	public VReserva(Menu ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
@@ -114,6 +116,9 @@ public class VReserva extends JDialog {
 		rellenarPlaza();
 	}
 
+	/**
+	 * Es un metodo que nos enseña el id de la plaza disponible
+	 */
 	private void rellenarPlaza() {
 		String id_Plaza = String.valueOf(datos.traerIDPlaza());
 		
@@ -125,6 +130,10 @@ public class VReserva extends JDialog {
 		
 	}
 
+	/**
+	 * El metodo lo usaremos para realizar la reserva de una plaza en nuestro local
+	 * @param usuario
+	 */
 	protected void reservarPlaza(Usuario usuario) {
 		
 		Reserva rev = new Reserva();
@@ -143,6 +152,10 @@ public class VReserva extends JDialog {
 		
 	}
 
+	/**
+	 * El metodo comprueba si las fechas son identicas, si hay alguna fecha que sea anterior al dia actual, si la fecha de fin es anterior a la fecha inicio y si hay plazas disponibles
+	 * @return boolean
+	 */
 	protected boolean comprobar() {
 		boolean bien = true;
 		

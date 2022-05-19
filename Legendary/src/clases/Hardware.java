@@ -1,10 +1,13 @@
 package clases;
 
-public class Hardware {
+/**
+ * 
+ * @author 1dam
+ *
+ * Esta clase se us para trabajar con los datos de Hardware
+ */
+	public class Hardware {
 
-	/**
-	 * Esta clase se us para trabajar con los datos de Hardware
-	 */
 	
 	//Atributo
 	private int idHW;

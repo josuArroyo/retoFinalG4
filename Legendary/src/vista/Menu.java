@@ -17,25 +17,24 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta clase gestiona el menu de la aplicacion
+ * 
+ * @author 1dam
+ *
+ */
 public class Menu extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	
-
-	/**
-	 * Launch the application.
-	 */
-	/**
-	 * Create the dialog.
-
-
-	 * @param modal 
-	 * @param datos 
-	 * @param dni 
-	 */
-
-
 	private JButton btnComprar;
+
+	/**
+	 * Es el constructor de la ventana
+	 * @param ventanaPadre
+	 * @param modal
+	 * @param usuario
+	 */
+	
 	public Menu(JFrame ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
@@ -50,6 +49,7 @@ public class Menu extends JDialog {
 			btnComprar = new JButton("Comprar");
 			btnComprar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					
 					comprar(usuario);
 
 				}
@@ -95,12 +95,21 @@ public class Menu extends JDialog {
 			contentPanel.add(btnReservar);
 		}
 	}
+	/**
+	 * El metodo nos envia a la ventana de Comprar
+	 * @param usuario
+	 */
 	protected void comprar(Usuario usuario) {
 		VComprar comprar = new VComprar(this, true , usuario);
 		comprar.setVisible(true);
 		
 	}
 
+	/**
+	 * El metodo dependiendo de si entra un usuario o un admin enviara 
+	 * a la ventana de gestion datos o a la ventana de Registro
+	 * @param usuario
+	 */
 	protected void cargarDatos(Usuario usuario) {
 		if(usuario.isEsAdmin()) {
 			VGestionDatos ventanaDatos = new VGestionDatos(this,true,usuario);
@@ -113,12 +122,20 @@ public class Menu extends JDialog {
 		
 	}
 
+	/**
+	 * El metodo nos enviara a la ventana de Reserva
+	 * @param usuario
+	 */
 	protected void cargarReserva(Usuario usuario) {
 		VReserva ventanaReserva = new VReserva(this,true,usuario);
 		ventanaReserva.setVisible(true);
 		
 	}
 
+	/**
+	 * El metodo nos envia a la ventana de Torneo
+	 * @param usuario
+	 */
 	protected void cargarTorneo(Usuario usuario) {
 		VTorneo ventanaTorneo = new VTorneo(this,true,usuario);
 		ventanaTorneo.setVisible(true);

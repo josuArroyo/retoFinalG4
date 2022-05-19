@@ -33,6 +33,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta clase gestiona la compra de Hardware
+ * 
+ * @author 1dam
+ *
+ */
 public class VComprar extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -41,31 +47,25 @@ public class VComprar extends JDialog {
 	private JScrollPane scroll = new JScrollPane();
 	ArrayList<Hardware> datosHardware;
 	private JTable table = null;
-	//private String dni;
+	// private String dni;
 	private String prueba;
 	ControladorDatos datos = null;
 	DefaultTableModel model;
 	private JButton btnAniadir;
 	private JButton btnNewButton;
 	private JButton btnVer;
-	/**
-	 * Launch the application.
-	 */
-
 
 	/**
-	 * Create the dialog.
+	 * Este es el constructor de la ventana
 	 * 
-	 * @param modal
 	 * @param ventanaPadre
-	 * @param datos2
+	 * @param modal
 	 * @param usuario
 	 */
 	public VComprar(JDialog ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		
-		
+
 		setBounds(100, 100, 672, 520);
 
 		getContentPane().setLayout(new BorderLayout());
@@ -97,19 +97,18 @@ public class VComprar extends JDialog {
 		});
 		btnVer.setBounds(453, 34, 89, 23);
 		contentPanel.add(btnVer);
-		
+
 		btnAniadir = new JButton("A\u00D1ADIR");
 		if (usuario.isEsAdmin()) {
-		btnAniadir.setEnabled(true);
-		}else 
+			btnAniadir.setEnabled(true);
+		} else
 			btnAniadir.setEnabled(false);
 
 		btnAniadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
-					cargarVCRUD(usuario);
-				
-				
+
+				cargarVCRUD(usuario);
+
 			}
 		});
 		btnAniadir.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -118,23 +117,28 @@ public class VComprar extends JDialog {
 
 	}
 
-	
-
-
+	/**
+	 * Este metodo nos envia a la ventana de CRUDHardware
+	 */
 	protected void cargarVCRUD(Usuario usuario) {
-		VCRUDHardware vcru = new VCRUDHardware(this, true,usuario);
+		VCRUDHardware vcru = new VCRUDHardware(this, true, usuario);
 		vcru.setVisible(true);
-		
+
 	}
 
-
-
+	/**
+	 * Este metodo nos cierra la ventana actual
+	 */
 	protected void volver() {
 
 		this.dispose();
 
 	}
 
+	/**
+	 * El metodo sirve para mostrar la tabla en la que se mostraran los datos
+	 * @param usuario
+	 */
 	protected void presentarTabla(Usuario usuario) {
 		//
 		// table = new JTable();
@@ -153,6 +157,10 @@ public class VComprar extends JDialog {
 
 	}
 
+	/**
+	 * El metodo nos envia a la ventana VCRUDHardware cuando seleccionas algun dato de la tabla
+	 * @param usuario
+	 */
 	protected void seleccionHardware(Usuario usuario) {
 		int row = table.getSelectedRow();
 		String texto = (String) table.getValueAt(row, 0);
@@ -164,11 +172,15 @@ public class VComprar extends JDialog {
 				hardw = hardware;
 			}
 		}
-		VCRUDHardware crudhard = new VCRUDHardware(this, true,hardw, usuario);
+		VCRUDHardware crudhard = new VCRUDHardware(this, true, hardw, usuario);
 		crudhard.setVisible(true);
 
 	}
 
+	/**
+	 * Este metodo sirve para crear la tabla que mostraremos en la ventana
+	 * @return JTable
+	 */
 	private JTable cargarTabla() {
 
 		// Columnas
@@ -196,6 +208,9 @@ public class VComprar extends JDialog {
 
 	}
 
+	/**
+	 * El metodo sirva para cargar los datos de la base de datos en una comboBox
+	 */
 	private void cargarTipoHardware() {
 		ArrayList<Hardware> cargaremos;
 		datos = new BDAImplementacion();

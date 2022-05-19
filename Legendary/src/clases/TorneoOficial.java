@@ -1,10 +1,15 @@
 package clases;
 
-public class TorneoOficial extends Torneo{
-
 	/**
+	 * 
+	 * @author 1dam
+	 *
 	 * Esta clase se utiliza para trabajar con datos de torneo Oficial
 	 */
+
+public class TorneoOficial extends Torneo{
+
+	
 	//Atributos
 	
 	private String premio;

@@ -1,10 +1,15 @@
 package clases;
 
-public class Plaza {
-
 	/**
+	 * 
+	 * @author 1dam
+	 *
 	 * Esta clase se utiliza para trabajar con datos de Plaza
 	 */
+
+public class Plaza {
+
+	
 	
 	//Atributos
 	private int idPlaza;

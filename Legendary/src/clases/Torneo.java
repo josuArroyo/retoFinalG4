@@ -2,11 +2,16 @@ package clases;
 
 import java.time.LocalDate;
 
-public class Torneo {
-
 	/**
+	 * 
+	 * @author 1dam
+	 *
 	 * Esta clase se utiliza para trabajar con datos de Torneo
 	 */
+
+public class Torneo {
+
+	
 	//Atributos
 	
 	private int idTorneo;

@@ -27,6 +27,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta es la clase que gestiona torneos
+ * @author 1dam
+ *
+ */
 public class VTorneo extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -39,29 +44,11 @@ public class VTorneo extends JDialog {
 	private ArrayList<Torneo> listaTorneos = new ArrayList<>();
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			VTorneo dialog = new VTorneo();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
-	 * Create the dialog.
-	 * 
+	 * Este es el constructor de la ventana
 	 * @param ventanaPadre
 	 * @param modal
 	 * @param usuario
-	 * @param dni
 	 */
-
-	//
-
 	public VTorneo(Menu ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
@@ -112,6 +99,11 @@ public class VTorneo extends JDialog {
 
 	}
 
+	/**
+	 * El metodo sirve para mostrar la tabla 
+	 * @param usuario
+	 */
+	
 	protected void presentarTabla(Usuario usuario) {
 
 		table = this.cargarTabla();
@@ -128,6 +120,10 @@ public class VTorneo extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo nos deja seleccionar un campo de la tabla y nos pregunta si queremkos inscribirnos en el torneo seleccionado.
+	 * @param usuario
+	 */
 	protected void seleccionarTorneo(Usuario usuario) {
 		int row = table.getSelectedRow();
 		String text = (String) table.getValueAt(row, 0);
@@ -154,6 +150,10 @@ public class VTorneo extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo es para crear la tabla con los datos y parametros necesarios
+	 * @return JTable
+	 */
 	private JTable cargarTabla() {
 
 		String[] columnNames = { "id_torneo", "nombre", "aforo", "juego", "direccion", "fecha", "tipo",
@@ -187,6 +187,9 @@ public class VTorneo extends JDialog {
 		return new JTable(model);
 	}
 
+	/**
+	 * Este metodo nos envia a la ventana de añadir torneo
+	 */
 	protected void cargarAniadirTorneo() {
 
 		VAniadirTorneo ventanaAniadirTor = new VAniadirTorneo(this, true);
@@ -194,6 +197,9 @@ public class VTorneo extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo es para rellenar la comboBox con los datos  de la base de datos 
+	 */
 	private void cargarCombo() {
 		ArrayList<Torneo> listaTorneo = new ArrayList<>();
 

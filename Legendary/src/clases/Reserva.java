@@ -4,11 +4,16 @@ import java.sql.Clob;
 import java.sql.Date;
 import java.time.LocalDate;
 
-public class Reserva {
 
 	/**
+	 * 
+	 * @author 1dam
 	 * Esta clase se utiliza para trabajar con datos de reserva
+	 *
 	 */
+public class Reserva {
+
+	
 	//Atributos
 		private int id_Plaza;
 		private String dni;

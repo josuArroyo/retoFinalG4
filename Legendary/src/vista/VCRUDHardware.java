@@ -29,6 +29,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 
+/**
+ * Esta clase Es la que gestiona el CRUD d hardware
+ * @author 1dam
+ *
+ */
 public class VCRUDHardware extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -56,18 +61,13 @@ public class VCRUDHardware extends JDialog {
 	private JLabel lblMarca;
 	private JLabel lblTipo;
 	private JLabel lblStock;
+	
 	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the dialog.
-	 * 
-	 * @param datos
+	 * Este es el constructor de VCRUDHardware cuando entras desde la seleccion de un hardware
+	 * @param ventanaPadre
+	 * @param modal
 	 * @param hardw
-	 * @param b
-	 * @param vComprar
-	 * @wbp.parser.constructor
+	 * @param usuario
 	 */
 	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Hardware hardw,Usuario usuario) {
 		super(ventanaPadre);
@@ -105,6 +105,12 @@ public class VCRUDHardware extends JDialog {
 		}
 	}
 
+	/**
+	 * Este es el constructor cuando entras desde el btn de añadir
+	 * @param ventanaPadre
+	 * @param modal
+	 * @param usuario
+	 */
 	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
@@ -116,6 +122,9 @@ public class VCRUDHardware extends JDialog {
 		
 	}
 
+	/**
+	 * Este metodo se usa para cargar la ventana que se llamara desde los dos constructores
+	 */
 	private void cargarVentana() {
 
 		setBounds(100, 100, 613, 551);
@@ -260,11 +269,17 @@ public class VCRUDHardware extends JDialog {
 		}
 	}
 
+	/**
+	 * El metodo sirve para cerrar la ventana actual
+	 */
 	protected void cerrarVentana() {
 		this.dispose();
 		
 	}
 
+	/**
+	 * Este metodo es para añadir hardware a la base de datos
+	 */
 	private void aniadirHardware() {
 
 		Hardware hardw = AniadirPantallaHardw();
@@ -283,6 +298,10 @@ public class VCRUDHardware extends JDialog {
 		textPrecioCoste.setText("");
 	}
 
+	/**
+	 * Este metodo sirve para recoger los datos de los campos de la ventana
+	 * @return Hardware
+	 */
 	private Hardware AniadirPantallaHardw() {
 
 		Hardware hardw = new Hardware();
@@ -302,6 +321,9 @@ public class VCRUDHardware extends JDialog {
 		
 	}
 
+	/**
+	 * El metodo se utiliza modificar el hardware
+	 */
 	private void modificar() {
 
 		Hardware hw = ModiPantallaHardw();
@@ -310,6 +332,10 @@ public class VCRUDHardware extends JDialog {
 
 	}
 
+	/**
+	 * Este metodo sirve para cargar los datos en un objeto que recogera los datos y se enviaran a modificar
+	 * @return Hardware
+	 */
 	private Hardware ModiPantallaHardw() {
 
 		Hardware hardw = new Hardware();
@@ -321,6 +347,9 @@ public class VCRUDHardware extends JDialog {
 		return hardw;
 	}
 
+	/**
+	 * Este metodo nos añadira el hardware a la base de datos
+	 */
 	private void comprar() {
 
 		LocalDate fecha;

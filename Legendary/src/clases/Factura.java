@@ -2,12 +2,15 @@ package clases;
 
 import java.time.LocalDate;
 
+/**
+ * 
+ * @author 1dam
+ * Esta clase se utiliza para poder trabajar con los datos de factura
+ *
+ */
 public class Factura {
 
-	/**
-	 * Esta clase se utiliza para poder trabajar con los datos de factura
-	 * 
-	 */
+	//Atributos
 	private int idFactura;
 	private LocalDate fechaFactura;
 	private float precio;

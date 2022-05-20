@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -13,6 +14,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import Excepciones.ExceptionManager;
 import clases.Hardware;
 import clases.Usuario;
 import modelo.BDAImplementacion;
@@ -189,7 +191,11 @@ public class VComprar extends JDialog {
 		model = new DefaultTableModel(null, columnNames);
 		model.setRowCount(0);
 
-		datosHardware = datos.listarDatosHardware((String) comboBox.getSelectedItem());
+		try {
+			datosHardware = datos.listarDatosHardware((String) comboBox.getSelectedItem());
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al listar hardware", JOptionPane.ERROR_MESSAGE);
+		}
 
 		for (Hardware hard : datosHardware) {
 
@@ -212,10 +218,14 @@ public class VComprar extends JDialog {
 	 * El metodo sirva para cargar los datos de la base de datos en una comboBox
 	 */
 	private void cargarTipoHardware() {
-		ArrayList<Hardware> cargaremos;
+		ArrayList<Hardware> cargaremos = null;
 		datos = new BDAImplementacion();
 
-		cargaremos = datos.listarTipoHardware();
+		try {
+			cargaremos = datos.listarTipoHardware();
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al listar tipo hardware", JOptionPane.ERROR_MESSAGE);
+		}
 		for (Hardware cargando : cargaremos) {
 
 			comboBox.addItem(cargando.getTipoHW());

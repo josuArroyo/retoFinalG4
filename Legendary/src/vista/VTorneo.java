@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import Excepciones.ExceptionManager;
 import clases.Torneo;
 import clases.TorneoNoOficial;
 import clases.TorneoOficial;
@@ -58,13 +59,12 @@ public class VTorneo extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-
-		JLabel lblNewLabel = new JLabel("Haz doble click sobre un torneo para ver mas inforamacion e inscribirte al mismo");
+		JLabel lblNewLabel = new JLabel(
+				"Haz doble click sobre un torneo para ver mas inforamacion e inscribirte al mismo");
 		lblNewLabel.setFont(new Font("Algerian", Font.PLAIN, 11));
 		lblNewLabel.setBounds(50, 51, 567, 38);
 		contentPanel.add(lblNewLabel);
 
-		
 		comboBox = new JComboBox();
 		comboBox.setBounds(60, 106, 333, 38);
 		contentPanel.add(comboBox);
@@ -140,7 +140,11 @@ public class VTorneo extends JDialog {
 
 		if (JOptionPane.OK_OPTION == confirmar) {
 
-			datos.inscribirse(usuario, torne);
+			try {
+				datos.inscribirse(usuario, torne);
+			} catch (ExceptionManager e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(),"error al inscribirse torneo", JOptionPane.ERROR_MESSAGE);
+			}
 			JOptionPane.showMessageDialog(null, "Te has inscrito al torneo.");
 			// sdf
 
@@ -163,7 +167,11 @@ public class VTorneo extends JDialog {
 		model = new DefaultTableModel(null, columnNames);
 		model.setRowCount(0);
 
-		listaTorneos = datos.listarDatosTorneos((String) comboBox.getSelectedItem());
+		try {
+			listaTorneos = datos.listarDatosTorneos((String) comboBox.getSelectedItem());
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "error al cargar torneo", JOptionPane.ERROR_MESSAGE);
+		}
 
 		for (Torneo tor : listaTorneos) {
 
@@ -203,8 +211,12 @@ public class VTorneo extends JDialog {
 	private void cargarCombo() {
 		ArrayList<Torneo> listaTorneo = new ArrayList<>();
 
-		listaTorneo = datos.listarJuegoTorneo();
-		
+		try {
+			listaTorneo = datos.listarJuegoTorneo();
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al cargar torneo", JOptionPane.ERROR_MESSAGE);
+		}
+
 		for (Torneo tor : listaTorneo) {
 			comboBox.addItem(tor.getJuego());
 		}

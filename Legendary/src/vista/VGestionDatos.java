@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Excepciones.ExceptionManager;
 import clases.Hardware;
 import clases.Usuario;
 import modelo.BDAImplementacion;
@@ -32,7 +33,7 @@ public class VGestionDatos extends JDialog {
 	private ControladorDatos datos = new BDAImplementacion();
 	private JComboBox comboBox;
 	private ArrayList<Usuario> cargaremos = new ArrayList<>();
-
+	
 	/**
 	 * Este el constructor de la ventana
 	 * @param ventanaPadre
@@ -40,8 +41,9 @@ public class VGestionDatos extends JDialog {
 	 * @param usuario
 	 */
 	public VGestionDatos(Menu ventanaPadre, boolean modal, Usuario usuario) {
-
+		
 		super(ventanaPadre);
+
 		this.setModal(modal);
 		setBounds(100, 100, 589, 319);
 		getContentPane().setLayout(new BorderLayout());
@@ -68,8 +70,14 @@ public class VGestionDatos extends JDialog {
 				int confirmar = JOptionPane.showConfirmDialog(null,"Estas seguro de que quieres eliminar a este usuario?");
 				
 				if (JOptionPane.OK_OPTION == confirmar) {
-					System.out.println(comboBox.getSelectedItem().toString().substring(0,9));
-					datos.eliminarUsuario(comboBox.getSelectedItem().toString().substring(0,9));
+					cerrarVentana();
+
+					
+					try {
+						datos.eliminarUsuario(comboBox.getSelectedItem().toString().substring(0,9));
+					} catch (ExceptionManager e1) {
+						excepciones(e1);
+					}
 					JOptionPane.showMessageDialog(null, "El usuario se ha borrado.");
 				} else {
 					JOptionPane.showMessageDialog(null, "El usuario no se ha borrado.");
@@ -92,9 +100,14 @@ public class VGestionDatos extends JDialog {
 		
 	}
 
-	/**
-	 * El Metodo se usa para cerrar la ventana actual
-	 */
+	protected void excepciones(ExceptionManager e1) {
+		JOptionPane.showMessageDialog(this, e1.getMessage(),"error al borrar", JOptionPane.ERROR_MESSAGE);		
+	}
+
+
+/**
+ * El Metodo se usa para cerrar la ventana actual
+ */
 	protected void cerrarVentana() {
 		this.dispose();
 		
@@ -104,7 +117,11 @@ public class VGestionDatos extends JDialog {
 	 * Este metodo es para cargar la informacion de los usuarios en una comboBox
 	 */
 	private void cargarUsuarios() {
-		cargaremos = datos.listarUsuarios();
+		try {
+			cargaremos = datos.listarUsuarios();
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al listar", JOptionPane.ERROR_MESSAGE);
+		}
 
 		if (!cargaremos.isEmpty()) {
 			for (Usuario cargando : cargaremos) {

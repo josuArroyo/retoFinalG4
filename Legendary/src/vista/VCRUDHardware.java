@@ -13,6 +13,7 @@ import javax.swing.border.TitledBorder;
 
 import org.w3c.dom.Text;
 
+import Excepciones.ExceptionManager;
 import clases.Factura;
 import clases.Hardware;
 import clases.Usuario;
@@ -284,7 +285,12 @@ public class VCRUDHardware extends JDialog {
 
 		Hardware hardw = AniadirPantallaHardw();
 		
-		datos.aniadirHardware(hardw);
+		try {
+			datos.aniadirHardware(hardw);
+		} catch (ExceptionManager e) {
+			
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al añadir hardware", JOptionPane.ERROR_MESSAGE);
+		}
 		JOptionPane.showMessageDialog(this, "Hardware dado de alta");
 
 
@@ -327,7 +333,11 @@ public class VCRUDHardware extends JDialog {
 	private void modificar() {
 
 		Hardware hw = ModiPantallaHardw();
-		datos.modificarHardware(hw);
+		try {
+			datos.modificarHardware(hw);
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al modificar hardware", JOptionPane.ERROR_MESSAGE);
+		}
 		JOptionPane.showMessageDialog(this, "Hardware modificado con éxito");
 
 	}
@@ -359,7 +369,11 @@ public class VCRUDHardware extends JDialog {
 		fak.setCantidad(Integer.valueOf(textCantidad.getText()));
 		fak.setDni(usu.getDni());
 		fak.setFechaFactura(LocalDate.now());
-		datos.comprarHardware(fak, usu.getDni());
+		try {
+			datos.comprarHardware(fak, usu.getDni());
+		} catch (ExceptionManager e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(),"error al comprar hardware", JOptionPane.ERROR_MESSAGE);
+		}
 
 	}
 

@@ -32,6 +32,7 @@ import java.awt.event.ActionEvent;
 
 /**
  * Esta clase Es la que gestiona el CRUD d hardware
+ * 
  * @author 1dam
  *
  */
@@ -62,37 +63,39 @@ public class VCRUDHardware extends JDialog {
 	private JLabel lblMarca;
 	private JLabel lblTipo;
 	private JLabel lblStock;
-	
+
 	/**
-	 * Este es el constructor de VCRUDHardware cuando entras desde la seleccion de un hardware
+	 * Este es el constructor de VCRUDHardware cuando entras desde la seleccion de
+	 * un hardware
+	 * 
 	 * @param ventanaPadre
 	 * @param modal
 	 * @param hardw
 	 * @param usuario
+	 * @wbp.parser.constructor
 	 */
-	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Hardware hardw,Usuario usuario) {
+	public VCRUDHardware(VComprar ventanaPadre, boolean modal, Hardware hardw, Usuario usuario) {
 		super(ventanaPadre);
 		this.setModal(modal);
 		this.hardw = hardw;
-		this.usu = usuario; 
+		this.usu = usuario;
 		cargarVentana();
-		
-		
+
 		if (usuario.isEsAdmin()) {
-			
-			
+
 			lblprecioCoste.setVisible(false);
 			textPrecioCoste.setVisible(false);
 			btnAniadir.setVisible(false);
-			
-			//hacemos que los siguientes campos no sean editables ya sea mientras este comprando o modificando el admin
+
+			// hacemos que los siguientes campos no sean editables ya sea mientras este
+			// comprando o modificando el admin
 			textId.setEnabled(false);
 			textNombre.setEnabled(false);
 			textMarca.setEnabled(false);
 			textTipo.setEnabled(false);
-			
-		}else {
-			
+
+		} else {
+
 			btnAniadir.setVisible(false);
 			btnModificar.setVisible(false);
 			textPrecioCoste.setVisible(false);
@@ -108,6 +111,7 @@ public class VCRUDHardware extends JDialog {
 
 	/**
 	 * Este es el constructor cuando entras desde el btn de añadir
+	 * 
 	 * @param ventanaPadre
 	 * @param modal
 	 * @param usuario
@@ -120,11 +124,12 @@ public class VCRUDHardware extends JDialog {
 		btnModificar.setEnabled(false);
 		lblCantidad.setEnabled(false);
 		textCantidad.setEnabled(false);
-		
+
 	}
 
 	/**
-	 * Este metodo se usa para cargar la ventana que se llamara desde los dos constructores
+	 * Este metodo se usa para cargar la ventana que se llamara desde los dos
+	 * constructores
 	 */
 	private void cargarVentana() {
 
@@ -186,7 +191,6 @@ public class VCRUDHardware extends JDialog {
 		lblStock.setBounds(338, 222, 86, 14);
 		contentPanel.add(lblStock);
 
-
 		textTipo = new JTextField();
 		textTipo.setColumns(10);
 		textTipo.setBounds(48, 257, 207, 31);
@@ -202,11 +206,12 @@ public class VCRUDHardware extends JDialog {
 		btnComprar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (Integer.parseInt(textStock.getText()) == 0) {
-					JOptionPane.showMessageDialog(null, "ERROR NO HAY STOCK DISPONIBLE", "OWO",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "ERROR NO HAY STOCK DISPONIBLE", "OWO",
+							JOptionPane.ERROR_MESSAGE);
 				} else
 					comprar();
-					JOptionPane.showMessageDialog(null, "Compra realizada con exito.");
-					cerrarVentana();
+				JOptionPane.showMessageDialog(null, "Compra realizada con exito.");
+				cerrarVentana();
 			}
 		});
 		btnComprar.setBounds(408, 451, 160, 38);
@@ -236,12 +241,11 @@ public class VCRUDHardware extends JDialog {
 		btnAniadir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (textId.getText().equalsIgnoreCase("")) {
-					JOptionPane.showMessageDialog(null, "ERROR campos no rellenos", "OWO",
-							JOptionPane.ERROR_MESSAGE);
-				}else {
+					JOptionPane.showMessageDialog(null, "ERROR campos no rellenos", "OWO", JOptionPane.ERROR_MESSAGE);
+				} else {
 					aniadirHardware();
 				}
-				
+
 			}
 		});
 		btnAniadir.setFont(new Font("Algerian", Font.PLAIN, 20));
@@ -275,7 +279,7 @@ public class VCRUDHardware extends JDialog {
 	 */
 	protected void cerrarVentana() {
 		this.dispose();
-		
+
 	}
 
 	/**
@@ -284,16 +288,14 @@ public class VCRUDHardware extends JDialog {
 	private void aniadirHardware() {
 
 		Hardware hardw = AniadirPantallaHardw();
-		
+
 		try {
 			datos.aniadirHardware(hardw);
 		} catch (ExceptionManager e) {
-			
-			JOptionPane.showMessageDialog(this, e.getMessage(),"error al añadir hardware", JOptionPane.ERROR_MESSAGE);
+
+			JOptionPane.showMessageDialog(this, e.getMessage(), "error al añadir hardware", JOptionPane.ERROR_MESSAGE);
 		}
-		JOptionPane.showMessageDialog(this, "Hardware dado de alta");
-
-
+		
 
 		textId.setText("");
 		textNombre.setText("");
@@ -306,25 +308,48 @@ public class VCRUDHardware extends JDialog {
 
 	/**
 	 * Este metodo sirve para recoger los datos de los campos de la ventana
+	 * 
 	 * @return Hardware
 	 */
 	private Hardware AniadirPantallaHardw() {
 
 		Hardware hardw = new Hardware();
-		
-		
-		hardw.setIdHW(Integer.parseInt(textId.getText()));
-		hardw.setNombreHW(textNombre.getText());
-		hardw.setPrecioHW(Float.parseFloat(textPrecio.getText()));
-		hardw.setMarcaHW(textMarca.getText());
-		hardw.setTipoHW(textTipo.getText());
-		hardw.setStockHW(Integer.parseInt(textStock.getText()));
-		hardw.setPrecioCosteHW(Float.parseFloat(textPrecioCoste.getText()));
-		
+
+		if (textId.getText().isEmpty() || textNombre.getText().isEmpty() || textPrecio.getText().isEmpty()
+				|| textMarca.getText().isEmpty() || textTipo.getText().isEmpty() || textStock.getText().isEmpty()
+				|| textPrecioCoste.getText().isEmpty() ||comprobarErrorNoNumerico(textPrecio.getText()) ||comprobarErrorNoNumerico(textPrecioCoste.getText()) ||comprobarErrorNoNumerico(textStock.getText()) ){
+			JOptionPane.showMessageDialog(this, "Datos incorrectos ");
+
 			
-		
+		}else {
+			hardw.setIdHW(Integer.parseInt(textId.getText()));
+			hardw.setNombreHW(textNombre.getText());
+			hardw.setPrecioHW(Float.parseFloat(textPrecio.getText()));
+			hardw.setMarcaHW(textMarca.getText());
+			hardw.setTipoHW(textTipo.getText());
+			hardw.setStockHW(Integer.parseInt(textStock.getText()));
+			hardw.setPrecioCosteHW(Float.parseFloat(textPrecioCoste.getText()));
+
+			JOptionPane.showMessageDialog(this, "Hardware dado de alta");
+			
+		}
 		return hardw;
+
+	}
+
+	private boolean comprobarErrorNoNumerico(String text) {
 		
+		boolean correcto = false;
+		
+		for (int i = 0; i < text.length(); i++) {
+			if (!Character.isDigit(text.charAt(i))) {
+				correcto = true;
+				i = text.length();
+			} 
+
+		}
+		
+		return correcto;
 	}
 
 	/**
@@ -336,14 +361,17 @@ public class VCRUDHardware extends JDialog {
 		try {
 			datos.modificarHardware(hw);
 		} catch (ExceptionManager e) {
-			JOptionPane.showMessageDialog(this, e.getMessage(),"error al modificar hardware", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "error al modificar hardware",
+					JOptionPane.ERROR_MESSAGE);
 		}
 		JOptionPane.showMessageDialog(this, "Hardware modificado con éxito");
 
 	}
 
 	/**
-	 * Este metodo sirve para cargar los datos en un objeto que recogera los datos y se enviaran a modificar
+	 * Este metodo sirve para cargar los datos en un objeto que recogera los datos y
+	 * se enviaran a modificar
+	 * 
 	 * @return Hardware
 	 */
 	private Hardware ModiPantallaHardw() {
@@ -372,10 +400,9 @@ public class VCRUDHardware extends JDialog {
 		try {
 			datos.comprarHardware(fak, usu.getDni());
 		} catch (ExceptionManager e) {
-			JOptionPane.showMessageDialog(this, e.getMessage(),"error al comprar hardware", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "error al comprar hardware", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
 
-		
 }

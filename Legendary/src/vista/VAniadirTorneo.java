@@ -33,6 +33,7 @@ import javax.swing.JComboBox;
 
 /**
  * Esta clase es para añadir torneos
+ * 
  * @author 1dam
  *
  */
@@ -53,13 +54,16 @@ public class VAniadirTorneo extends JDialog {
 
 	/**
 	 * Este es el constructor de la ventana
+	 * 
 	 * @param ventanaPadre
 	 * @param modal
 	 */
 	public VAniadirTorneo(VTorneo ventanaPadre, boolean modal) {
 		super(ventanaPadre);
 		this.setModal(modal);
-		System.out.println("cosas");
+		
+		
+		
 		setBounds(100, 100, 679, 573);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -173,10 +177,11 @@ public class VAniadirTorneo extends JDialog {
 
 		try {
 			datos.aniadirTorneo(tor);
+			JOptionPane.showMessageDialog(this, "Torneo dado de alta");
 		} catch (ExceptionManager e) {
-			JOptionPane.showMessageDialog(this, e.getMessage(),"error al añadir torneo", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, e.getMessage(), "error al añadir torneo", JOptionPane.ERROR_MESSAGE);
 		}
-		JOptionPane.showMessageDialog(this, "Torneo dado de alta");
+		
 
 		textId.setText("");
 		textNombre.setText("");
@@ -189,24 +194,31 @@ public class VAniadirTorneo extends JDialog {
 	}
 
 	/**
-	 * Este metodo sirve para recoger los datos de los campos y añadirlos a un objeto que lo enviamos a el metodo crear torneo
+	 * Este metodo sirve para recoger los datos de los campos y añadirlos a un
+	 * objeto que lo enviamos a el metodo crear torneo
+	 * 
 	 * @return Torneo
 	 */
 	private Torneo AniadirPantallaTorneo() {
-		
+
 		Torneo tor = new Torneo();
-		
+
 		LocalDate fecha;
-		
-		if(rdbtnOficial.isSelected()) {
+
+		if (rdbtnOficial.isSelected()) {
 			tor = new TorneoOficial();
 			tor.setTipo(rdbtnOficial.getText());
 			((TorneoOficial) tor).setPremio(textPremio.getText());
-		}else {
+		} else {
 			tor = new TorneoNoOficial();
 			tor.setTipo(rdbtnNoOficial.getText());
 			((TorneoNoOficial) tor).setRegla(textPremio.getText());
-			
+
+		}
+
+		if (textId.getText().isEmpty() || textNombre.getText().isEmpty() || textAforo.getText().isEmpty()
+				|| textJuego.getText().isEmpty() || textFecha.getText().isEmpty() || textDir.getText().isEmpty() || Integer.parseInt(textAforo.getText())<0 ||comprobarErrorNoNumerico(textAforo.getText()) ||comprobarErrorNoNumerico(textPremio.getText()) ) {
+			JOptionPane.showMessageDialog(null, "Mete los datos en su sitio ");
 		}
 		
 		tor.setIdTorneo(Integer.parseInt(textId.getText()));
@@ -217,9 +229,21 @@ public class VAniadirTorneo extends JDialog {
 		fecha = LocalDate.parse(textFecha.getText(), formateador);
 		tor.setFecha(fecha);
 		tor.setDir(textDir.getText());
-		
-	
-		
+
 		return tor;
+	}
+
+	private boolean comprobarErrorNoNumerico(String text) {
+	boolean correcto = false;
+		
+		for (int i = 0; i < text.length(); i++) {
+			if (!Character.isDigit(text.charAt(i))) {
+				correcto = true;
+				i = text.length();
+			} 
+
+		}
+		
+		return correcto;
 	}
 }

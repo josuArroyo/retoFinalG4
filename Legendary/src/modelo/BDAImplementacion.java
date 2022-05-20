@@ -14,6 +14,11 @@ import java.util.TreeMap;
 import Excepciones.ExceptionManager;
 import clases.*;
 
+/**
+ * Esta clase sirve para conectar la base de datos con la aplicacion permitiendonos asi realizar sentencias sql
+ * @author 1dam
+ *
+ */
 public class BDAImplementacion implements ControladorDatos {
 
 	// declaramos variables de conexion con BD
@@ -22,16 +27,20 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// Los siguientes atributos se utilizan para recoger los valores del fich de
 	// configuración
+	/**  **/
 	private ResourceBundle configFile;
 	private String driverBD;
+	/** En esta variable se almacena la url de la base de datos **/
 	private String urlBD;
+	/** En esta variable se almacena el usuario de la base de datos **/
 	private String userBD;
+	/** En esta variable se almacena la contraseña que corresponde el usuario que guardas en la variable anterior **/
 	private String passwordBD;
 
 	// Sentencias SQL
 
 	// Usuarios
-
+	
 	final String ObtenerUsu = "select * from usuario where dni=? and contrasenia=?";
 	final String ObtenerDniUsu = "select * from usuario";
 	final String ObtenerUsuario = "Select distinct nombre, dni from Usuario group by nombre";
@@ -60,6 +69,10 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// Para la conexión utilizamos un fichero de configuaración, config que
 	// guardamos en el paquete control:
+	
+	/**
+	 * Este metodo se usa para guardar la conexion con la base de datos
+	 */
 	public BDAImplementacion() {
 
 		this.configFile = ResourceBundle.getBundle("modelo.config");
@@ -70,6 +83,10 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	// Metodo para conectarse a la base de datos.
+	
+	/**
+	 * Este metodo se usa para establecer la conexion con la base de datos
+	 */
 	public void openConnection() {
 		try {
 			con = DriverManager.getConnection(urlBD, userBD, passwordBD);
@@ -81,6 +98,10 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	// Metodo para desconectarse de la BD.
+	/**
+	 * Esta metodo se usa para cerrar la conexion con la base de datos
+	 * @throws SQLException
+	 */
 	public void closeConnection() throws SQLException {
 		if (stmt != null) {
 			stmt.close();
@@ -92,6 +113,12 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// Usuarios
 	// Metodo para aniadir Usuarios.
+	
+	/**
+	 * Este metodo sirve para dar de alta a un usuario en la base de datos
+	 * @param usu
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void altaUsuario(Usuario usu) throws ExceptionManager {
 		// TODO Auto-generated method stub
@@ -134,6 +161,11 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para modificar a un usuario en la base de datos
+	 * @param usu
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void modificarUsuario(Usuario usu) throws ExceptionManager {
 
@@ -170,6 +202,11 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para borrar a un usuario en la base de datos
+	 * @param dni
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void eliminarUsuario(String dni) throws ExceptionManager {
 
@@ -201,6 +238,13 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para buscar un usuario en la base de datos
+	 * @param dni
+	 * @param contrasenia
+	 * @throws ExceptionManager
+	 * @return Usuario
+	 */
 	@Override
 	public Usuario buscarUsuario(String dni, String contrasenia) throws ExceptionManager {
 
@@ -269,6 +313,12 @@ public class BDAImplementacion implements ControladorDatos {
 		return usua;
 	}
 
+	/**
+	 * Este metodo sirve para buscar un usuario mediante su dni en la base de datos
+	 * @param dni
+	 * @throws ExceptionManager
+	 * @return boolean
+	 */
 	@Override
 	public boolean buscarUsuarioDni(String dni) throws ExceptionManager {
 		// Variables
@@ -329,6 +379,13 @@ public class BDAImplementacion implements ControladorDatos {
 		return found;
 	}
 
+	/**
+	 * Este metodo sirve para listar los usuarios de la base de datos
+	 * @param usu
+	 * @return {@code ArrayList<Usuario>}
+	 * @throws ExceptionManager
+	 * 
+	 */
 	@Override
 	public ArrayList<Usuario> listarUsuarios() throws ExceptionManager {
 		ResultSet rs = null;
@@ -390,6 +447,11 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	// HARDWARE
+	/**
+	 * Este metodo sirve para añadir un hardware en la base de datos
+	 * @param har
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void aniadirHardware(Hardware har) throws ExceptionManager {
 		// Te quiero atti
@@ -424,6 +486,11 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para modificar un hardware en la base de datos
+	 * @param har
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void modificarHardware(Hardware har) throws ExceptionManager {
 
@@ -454,6 +521,12 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para comprar hardware en la aplicacion
+	 * @param fac
+	 * @param dni
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void comprarHardware(Factura fac, String Dni) throws ExceptionManager {
 
@@ -487,6 +560,12 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para listar los datos de el hardware de la base de datos
+	 * @param tipo
+	 * @return {@code ArrayList<Hardware>}
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public ArrayList<Hardware> listarDatosHardware(String tipo) throws ExceptionManager {
 
@@ -544,8 +623,12 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para listar el tipo de hardware en la base de datos
+	 * @return {@code ArrayList<Hardware>}
+	 * @throws ExceptionManager
+	 */
 	@Override
-
 	public ArrayList<Hardware> listarTipoHardware() throws ExceptionManager {
 		ResultSet rs = null;
 		Hardware hardw;
@@ -595,6 +678,11 @@ public class BDAImplementacion implements ControladorDatos {
 	}
 
 	// TORNEO
+	/**
+	 * Este metodo sirve para añadir un torneo en la base de datos
+	 * @param tor
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void aniadirTorneo(Torneo tor) throws ExceptionManager {
 
@@ -631,6 +719,11 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 	}
 
+	/**
+	 * Este metodo sirve para listar los datos de los torneos de la base de datos en base a su juego
+	 * @param juego
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public ArrayList<Torneo> listarDatosTorneos(String juego) throws ExceptionManager {
 		ArrayList<Torneo> listaTorneos = new ArrayList<>();
@@ -721,6 +814,11 @@ public class BDAImplementacion implements ControladorDatos {
 		return listaTorneos;
 	}
 
+	/**
+	 * Este metodo sirve para listar el tipo de juego de los torneos de la base de datos
+	 * @return {@code ArrayList<Torneo>}
+	 * @throws ExceptionManager
+	 */
 	public ArrayList<Torneo> listarJuegoTorneo() throws ExceptionManager {
 		ResultSet rs = null;
 		Torneo tor;
@@ -775,6 +873,12 @@ public class BDAImplementacion implements ControladorDatos {
 
 	}
 
+	/**
+	 * Este metodo sirve para que los usuarios se inscriban a los torneos
+	 * @param usu
+	 * @param tor
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void inscribirse(Usuario usu, Torneo tor) throws ExceptionManager {
 
@@ -806,6 +910,11 @@ public class BDAImplementacion implements ControladorDatos {
 
 	// RESERVA
 
+	/**
+	 * Este metodo sirve para reservar una plaza en el local
+	 * @param rev
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public void reservarPlaza(Reserva rev) throws ExceptionManager {
 
@@ -839,6 +948,11 @@ public class BDAImplementacion implements ControladorDatos {
 		}
 	}
 
+	/**
+	 * Este metodo sirve traed el id de las plazas disponibles
+	 * @return int
+	 * @throws ExceptionManager
+	 */
 	@Override
 	public int traerIDPlaza() throws ExceptionManager {
 		int id_plaza = 1;

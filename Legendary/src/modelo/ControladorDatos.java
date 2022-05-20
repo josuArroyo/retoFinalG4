@@ -10,7 +10,7 @@ import clases.*;
  * 
  * @author 1dam
  *
- *         Esta interfaz es la que enlaza la base de datos con el programa.
+ * Esta interfaz es la que enlaza la base de datos con el programa.
  */
 
 public interface ControladorDatos {
@@ -21,7 +21,7 @@ public interface ControladorDatos {
 	 * Este metodo lo usaremos para añadir usuarios a nuestra base de datos
 	 * 
 	 * @param usu
-	 * 
+	 * @throws ExceptionManager
 	 */
 	public void altaUsuario(Usuario usu) throws ExceptionManager;
 
@@ -29,6 +29,7 @@ public interface ControladorDatos {
 	 * Este metodo se usa para modificar los usuarios de nuestra base de datos
 	 * 
 	 * @param usu
+	 * @throws ExceptionManager
 	 */
 	public void modificarUsuario(Usuario usu) throws ExceptionManager;
 
@@ -36,6 +37,7 @@ public interface ControladorDatos {
 	 * Este metodo se usa para eliminar usuarios de nuestra base de datos
 	 * 
 	 * @param dni
+	 * @throws ExceptionManager
 	 */
 	public void eliminarUsuario(String dni) throws ExceptionManager;
 
@@ -44,6 +46,7 @@ public interface ControladorDatos {
 	 * 
 	 * @param dni
 	 * @param contrasenia
+	 * @throws ExceptionManager
 	 * @return Usuario
 	 */
 	public Usuario buscarUsuario(String dni, String contrasenia) throws ExceptionManager;
@@ -53,6 +56,7 @@ public interface ControladorDatos {
 	 * 
 	 * @param dni
 	 * @return boolean
+	 * @throws ExceptionManager
 	 */
 	public boolean buscarUsuarioDni(String dni) throws ExceptionManager;
 
@@ -61,6 +65,7 @@ public interface ControladorDatos {
 	 * datos
 	 * 
 	 * @return {@code ArrayList<Usuario>}
+	 * @throws ExceptionManager
 	 */
 	public ArrayList<Usuario> listarUsuarios() throws ExceptionManager;
 
@@ -70,6 +75,7 @@ public interface ControladorDatos {
 	 * Este metodo lo usamos para añadir un hardware a la base de datos
 	 * 
 	 * @param har
+	 * @throws ExceptionManager
 	 */
 	public void aniadirHardware(Hardware har) throws ExceptionManager;
 
@@ -78,6 +84,7 @@ public interface ControladorDatos {
 	 * de datos
 	 * 
 	 * @param har
+	 * @throws ExceptionManager
 	 */
 	public void modificarHardware(Hardware har) throws ExceptionManager;
 
@@ -86,6 +93,7 @@ public interface ControladorDatos {
 	 * 
 	 * @param fac
 	 * @param Dni
+	 * @throws ExceptionManager
 	 */
 	public void comprarHardware(Factura fac, String Dni) throws ExceptionManager;
 
@@ -96,6 +104,7 @@ public interface ControladorDatos {
 	 * 
 	 * @param tipo
 	 * @return {@code ArrayList<Hardware>}
+	 * @throws ExceptionManager
 	 */
 	public ArrayList<Hardware> listarDatosHardware(String tipo) throws ExceptionManager;
 
@@ -103,6 +112,7 @@ public interface ControladorDatos {
 	 * Este metodo se usa para listar el tipo de hardware de la base de datos
 	 * 
 	 * @return {@code ArrayList<Hardware>}
+	 * @throws ExceptionManager
 	 */
 	public ArrayList<Hardware> listarTipoHardware() throws ExceptionManager;
 
@@ -112,6 +122,7 @@ public interface ControladorDatos {
 	 * Este metodo lo usamos para añadir torneos a la base de datos
 	 * 
 	 * @param tor
+	 * @throws ExceptionManager
 	 */
 	public void aniadirTorneo(Torneo tor) throws ExceptionManager;
 
@@ -120,6 +131,7 @@ public interface ControladorDatos {
 	 * 
 	 * @param juego
 	 * @return {@code ArrayList<Torneo>}
+	 * @throws ExceptionManager
 	 */
 	public ArrayList<Torneo> listarDatosTorneos(String juego) throws ExceptionManager;
 
@@ -128,6 +140,7 @@ public interface ControladorDatos {
 	 * de datos
 	 * 
 	 * @return {@code ArrayList<Torneo>}
+	 * @throws ExceptionManager
 	 */
 	public ArrayList<Torneo> listarJuegoTorneo() throws ExceptionManager;
 
@@ -136,6 +149,7 @@ public interface ControladorDatos {
 	 * 
 	 * @param usu
 	 * @param tor
+	 * @throws ExceptionManager
 	 */
 	public void inscribirse(Usuario usu, Torneo tor) throws ExceptionManager;
 
@@ -145,6 +159,7 @@ public interface ControladorDatos {
 	 * Este metodo lo usamos para reservar plazas de nuestro local
 	 * 
 	 * @param rev
+	 * @throws ExceptionManager
 	 */
 	public void reservarPlaza(Reserva rev) throws ExceptionManager;
 
@@ -152,6 +167,7 @@ public interface ControladorDatos {
 	 * Este metodo nos devuelve el id de las plazas disponibles
 	 * 
 	 * @return int
+	 * @throws ExceptionManager
 	 */
 	public int traerIDPlaza() throws ExceptionManager;
 
